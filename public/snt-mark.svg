@@ -1,0 +1,17 @@
+<svg width="128" height="128" viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="SNT Rice mark">
+  <defs>
+    <linearGradient id="g1" x1="20" y1="16" x2="108" y2="112" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#35594D"/>
+      <stop offset="1" stop-color="#C08B31"/>
+    </linearGradient>
+    <linearGradient id="g2" x1="34" y1="30" x2="90" y2="98" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#F8F1E3" stop-opacity="0.95"/>
+      <stop offset="1" stop-color="#F2DEB3" stop-opacity="0.75"/>
+    </linearGradient>
+  </defs>
+  <rect x="8" y="8" width="112" height="112" rx="28" fill="url(#g1)"/>
+  <path d="M37 86C50 66 58 58 64 40C70 58 78 66 91 86" stroke="url(#g2)" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M47 54C52 52 57 48 64 40C71 48 76 52 81 54" stroke="#F7E6C0" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" opacity="0.85"/>
+  <circle cx="64" cy="42" r="8" fill="#F9F1E4"/>
+  <path d="M40 92H88" stroke="#F9F1E4" stroke-width="6" stroke-linecap="round" opacity="0.88"/>
+</svg>

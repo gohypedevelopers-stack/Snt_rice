@@ -1,0 +1,25 @@
+# Dependencies
+node_modules/
+
+# Next.js build output
+.next/
+out/
+
+# Local environment files
+.env
+.env.local
+.env.*.local
+!.env.example
+
+# Runtime data and uploaded invoice proof
+data/snt-store.json
+public/uploads/*
+
+# TypeScript and tooling output
+*.tsbuildinfo
+next-env.d.ts
+
+# Logs and local editor files
+*.log
+.DS_Store
+.vscode/
