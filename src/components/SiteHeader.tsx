@@ -28,11 +28,11 @@ export function SiteHeader() {
   }
 
   return (
-    <header className="site-header">
+    <header className="site-header site-header--ecom">
       <div className="container site-header__inner">
         <Link href="/" className="brand" aria-label="SNT Agro home">
           <span className="brand__mark">
-            <Image src={brandLogoSrc} alt="SNT Agro logo" width={46} height={46} priority />
+            <Image src={brandLogoSrc} alt="SNT Agro logo" width={42} height={42} priority />
           </span>
           <span className="brand__text">
             <strong>SNT Agro</strong>
@@ -64,14 +64,28 @@ export function SiteHeader() {
               {item.label}
             </Link>
           ))}
+          <a href="#products-catalog" className="site-nav__link" onClick={() => setMenuOpen(false)}>
+            Catalog
+          </a>
+          <a
+            href="https://wa.me/919953199155"
+            target="_blank"
+            rel="noreferrer"
+            className="site-nav__mobile-wa"
+            onClick={() => setMenuOpen(false)}
+          >
+            💬 WhatsApp Quote
+          </a>
           <Link href="/#contact" className="site-nav__mobile-cta" onClick={() => setMenuOpen(false)}>
-            Contact us
+            Contact Us
           </Link>
         </nav>
 
-        <Link href="/#contact" className="btn btn--dark">
-          Contact us
-        </Link>
+        <div className="header-ecom-actions header-ecom-actions--desktop">
+          <a href="https://wa.me/919953199155" target="_blank" rel="noreferrer" className="header-wa-btn">
+            <span>💬 Quick WhatsApp Quote</span>
+          </a>
+        </div>
       </div>
       {menuOpen ? <button type="button" className="mobile-nav-scrim" aria-label="Close navigation menu" onClick={() => setMenuOpen(false)} /> : null}
     </header>

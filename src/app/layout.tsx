@@ -1,6 +1,5 @@
 import type { Metadata, Viewport } from "next";
 import type { ReactNode } from "react";
-import { PublicWhatsAppFloat } from "@/components/PublicWhatsAppFloat";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
 import "./globals.css";
@@ -34,7 +33,6 @@ export default function RootLayout({ children }: RootLayoutProps) {
           <SiteHeader />
           <main>{children}</main>
           <SiteFooter />
-          <PublicWhatsAppFloat />
         </div>
       </body>
     </html>
