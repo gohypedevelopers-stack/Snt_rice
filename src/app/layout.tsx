@@ -1,13 +1,14 @@
 import type { Metadata, Viewport } from "next";
 import type { ReactNode } from "react";
+import { PublicWhatsAppFloat } from "@/components/PublicWhatsAppFloat";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "SNT Rice Retailer Portal",
+  title: "SNT Agro Industries Pvt. Ltd. | Rice, Pulses, and Food Products",
   description:
-    "A premium retailer portal for campaign registration, invoice tracking, reward milestones, support, and admin operations."
+    "SNT Agro Industries Pvt. Ltd. supplies rice, pulses, RTS products, and bulk food products for wholesale, export, and business enquiries."
 };
 
 export const viewport: Viewport = {
@@ -28,6 +29,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
           <SiteHeader />
           <main>{children}</main>
           <SiteFooter />
+          <PublicWhatsAppFloat />
         </div>
       </body>
     </html>

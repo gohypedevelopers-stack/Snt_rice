@@ -60,7 +60,7 @@ export default function LoginPage() {
       return;
     }
 
-    router.push("/dashboard");
+    router.push("/vendor/dashboard");
     router.refresh();
   }
 
@@ -118,7 +118,7 @@ export default function LoginPage() {
           )}
 
           {message ? <p className="form-error auth-message">{message}</p> : null}
-          <p className="auth-footer">Need help? <Link href="/helpdesk">Visit the helpdesk</Link></p>
+          <p className="auth-footer">Need help? <Link href="/vendor/helpdesk">Visit the helpdesk</Link></p>
         </div>
       </section>
     </div>

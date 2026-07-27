@@ -55,10 +55,10 @@ export default function RedeemPage() {
             </div>
 
             <div className="redeem-hero__actions">
-              <Link href="/milestones" className="btn btn--dark">
+              <Link href="/vendor/milestones" className="btn btn--dark">
                 View milestones
               </Link>
-              <Link href="/helpdesk" className="btn btn--light">
+              <Link href="/vendor/helpdesk" className="btn btn--light">
                 Need support
               </Link>
             </div>

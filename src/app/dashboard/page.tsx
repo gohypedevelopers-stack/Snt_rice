@@ -17,9 +17,9 @@ type DashboardPayload = {
 };
 
 const actionItems = [
-  { title: "Submit another invoice", status: "New", href: "/invoice-details", text: "Add invoice date, number, quantity, and proof." },
-  { title: "Check reward eligibility", status: "Progress", href: "/milestones", text: "See the remaining approved bags for your next tier." },
-  { title: "Contact helpdesk", status: "Support", href: "/helpdesk", text: "Raise a ticket if a submission or reward status looks wrong." }
+  { title: "Submit another invoice", status: "New", href: "/vendor/invoices", text: "Add invoice date, number, quantity, and proof." },
+  { title: "Check reward eligibility", status: "Progress", href: "/vendor/milestones", text: "See the remaining approved bags for your next tier." },
+  { title: "Contact helpdesk", status: "Support", href: "/vendor/helpdesk", text: "Raise a ticket if a submission or reward status looks wrong." }
 ];
 
 export default function DashboardPage() {
@@ -56,10 +56,10 @@ export default function DashboardPage() {
 
             <div className="dashboard-kpis">
               <article className="dashboard-kpi"><p>Accepted quantity</p><strong>{approved} bags</strong><span>Approved from your invoices</span></article>
-              <article className="dashboard-kpi"><p>Current slab</p><strong>{dashboard?.currentSlab.level ?? "—"}</strong><span>{dashboard?.nextSlab ? `${dashboard.nextSlab.target - approved} bags to next tier` : "Highest tier reached"}</span></article>
+              <article className="dashboard-kpi"><p>Current slab</p><strong>{dashboard?.currentSlab.level ?? "-"}</strong><span>{dashboard?.nextSlab ? `${dashboard.nextSlab.target - approved} bags to next tier` : "Highest tier reached"}</span></article>
               <article className="dashboard-kpi"><p>Review queue</p><strong>{dashboard?.pendingCount ?? 0} items</strong><span>Waiting for admin review</span></article>
             </div>
-            {!dashboard && !loading ? <div className="dashboard-login-callout"><strong>Your live account is waiting.</strong><span>Sign in with WhatsApp OTP to view and submit your own invoices.</span><Link href="/login" className="btn btn--dark">Sign in</Link></div> : null}
+            {!dashboard && !loading ? <div className="dashboard-login-callout"><strong>Your live account is waiting.</strong><span>Sign in with WhatsApp OTP to view and submit your own invoices.</span><Link href="/vendor/login" className="btn btn--dark">Sign in</Link></div> : null}
           </div>
 
           <aside className="dashboard-progress-card">
@@ -78,7 +78,7 @@ export default function DashboardPage() {
       <section className="dashboard-main">
         <div className="container dashboard-main__grid">
           <article className="dashboard-panel dashboard-panel--wide">
-            <div className="dashboard-panel__head"><div><p className="dashboard-eyebrow">Recent activity</p><h2>Invoice submissions</h2></div><Link href="/invoice-details" className="btn btn--dark">New invoice</Link></div>
+            <div className="dashboard-panel__head"><div><p className="dashboard-eyebrow">Recent activity</p><h2>Invoice submissions</h2></div><Link href="/vendor/invoices" className="btn btn--dark">New invoice</Link></div>
             <div className="dashboard-table-wrap"><table className="dashboard-table"><thead><tr><th>Date</th><th>Invoice</th><th>Qty</th><th>Status</th><th>Slab impact</th></tr></thead><tbody>{invoices.length ? invoices.map((row) => <tr key={row.id}><td>{new Date(row.invoiceDate).toLocaleDateString("en-IN", { day: "2-digit", month: "short", year: "numeric" })}</td><td>{row.invoiceNumber}</td><td>{row.quantity} bags</td><td><span className={`status status--${row.status}`}>{row.status}</span></td><td>{row.status === "accepted" || row.status === "claimed" ? `+${row.quantity}` : "Review"}</td></tr>) : <tr><td colSpan={5}>{dashboard ? "No invoices submitted yet. Start with your first invoice." : "Sign in to see your private invoice history."}</td></tr>}</tbody></table></div>
           </article>
 

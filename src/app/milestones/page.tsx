@@ -30,10 +30,10 @@ export default function MilestonesPage() {
             </div>
 
             <div className="milestone-hero__actions">
-              <Link href="/dashboard" className="btn btn--dark">
+              <Link href="/vendor/dashboard" className="btn btn--dark">
                 View progress
               </Link>
-              <Link href="/redeem" className="btn btn--light">
+              <Link href="/vendor/redeem" className="btn btn--light">
                 Check rewards
               </Link>
             </div>

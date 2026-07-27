@@ -32,10 +32,10 @@ export default function HelpdeskPage() {
             </div>
 
             <div className="helpdesk-hero__actions">
-              <Link href="/invoice-details" className="btn btn--dark">
+              <Link href="/vendor/invoices" className="btn btn--dark">
                 Submit invoice
               </Link>
-              <Link href="/dashboard" className="btn btn--light">
+              <Link href="/vendor/dashboard" className="btn btn--light">
                 Back to dashboard
               </Link>
             </div>

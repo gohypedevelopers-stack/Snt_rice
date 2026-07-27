@@ -1,0 +1,7 @@
+Unhandled Rejection: Error: EPERM: operation not permitted, open 'D:\rice project\next-env.d.ts'
+    at ignore-listed frames {
+  errno: -4048,
+  code: 'EPERM',
+  syscall: 'open',
+  path: 'D:\\rice project\\next-env.d.ts'
+}

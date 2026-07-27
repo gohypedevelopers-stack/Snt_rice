@@ -43,7 +43,7 @@ export default function InvoiceDetailsPage() {
             <h1>Submit the proof that moves your reward total forward.</h1>
             <p>Enter the commercial details once, attach the bill, and leave the SNT Rice review team a clean record to approve.</p>
             <div className="invoice-hero__meta"><span>Secure account flow</span><span>Admin review required</span><span>Up to 8 MB proof</span></div>
-            <div className="invoice-hero__actions"><Link href="/dashboard" className="btn btn--dark">Back to dashboard</Link><Link href="/helpdesk" className="btn btn--light">Need help?</Link></div>
+            <div className="invoice-hero__actions"><Link href="/vendor/dashboard" className="btn btn--dark">Back to dashboard</Link><Link href="/vendor/helpdesk" className="btn btn--light">Need help?</Link></div>
             <div className="invoice-summary"><div><strong>01</strong><span>Invoice record</span></div><div><strong>02</strong><span>Proof attachment</span></div><div><strong>03</strong><span>Admin decision</span></div></div>
           </div>
 
@@ -70,7 +70,7 @@ export default function InvoiceDetailsPage() {
               <div className="field"><label htmlFor="proof">Invoice proof</label><input id="proof" name="proof" type="file" accept="image/jpeg,image/png,application/pdf" required /><small className="field-help">Use a readable photo or PDF. Maximum size: 8 MB.</small></div>
               <div className="field"><label htmlFor="notes">Notes for review</label><textarea id="notes" name="notes" rows={4} placeholder="Optional support notes or clarification" /></div>
               {message ? <p className={message.startsWith("Invoice submitted") ? "form-success" : "form-error"}>{message}</p> : null}
-              <div className="invoice-form__actions"><button type="submit" className="btn btn--dark" disabled={busy}>{busy ? "Submitting..." : "Submit for review"}</button><Link href="/dashboard" className="btn btn--light">Cancel</Link></div>
+              <div className="invoice-form__actions"><button type="submit" className="btn btn--dark" disabled={busy}>{busy ? "Submitting..." : "Submit for review"}</button><Link href="/vendor/dashboard" className="btn btn--light">Cancel</Link></div>
             </form>
           </article>
 

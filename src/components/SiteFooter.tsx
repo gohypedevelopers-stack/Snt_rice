@@ -8,7 +8,7 @@ import { publicNav, supportChannels } from "@/lib/site-data";
 export function SiteFooter() {
   const pathname = usePathname();
 
-  if (pathname?.startsWith("/admin")) {
+  if (pathname?.startsWith("/admin") || pathname?.startsWith("/vendor")) {
     return null;
   }
 
@@ -19,42 +19,43 @@ export function SiteFooter() {
           <div className="footer-brand">
             <span className="footer-brand__mark"><Image src="/snt-mark.svg" alt="" width={42} height={42} /></span>
             <div>
-              <strong>SNT Rice</strong>
-              <span>Retailer rewards portal</span>
+              <strong>SNT Agro</strong>
+              <span>Industries Pvt. Ltd.</span>
             </div>
           </div>
-          <p className="site-footer__note">A clear home for registration, invoice submissions, campaign milestones, and reward claims.</p>
-          <Link href="/login" className="btn btn--light">Open retailer portal</Link>
+          <p className="site-footer__note">Rice, pulses, RTS products, and bulk supply for trade and business enquiries.</p>
+          <Link href="/#products" className="btn btn--light">View products</Link>
         </div>
 
         <div className="site-footer__columns">
           <div>
-            <p className="site-footer__label">Portal</p>
+            <p className="site-footer__label">Website</p>
             <div className="footer-links">
-              {publicNav.slice(0, 4).map((item) => <Link key={item.href} href={item.href}>{item.label}</Link>)}
+              {publicNav.map((item) => <Link key={item.href} href={item.href}>{item.label}</Link>)}
             </div>
           </div>
           <div>
             <p className="site-footer__label">Company</p>
             <div className="footer-links">
-              {publicNav.slice(4).map((item) => <Link key={item.href} href={item.href}>{item.label}</Link>)}
-              <Link href="/helpdesk">Retailer support</Link>
+              <Link href="/#about">About SNT Agro</Link>
+              <Link href="/#products">Product categories</Link>
+              <Link href="/#contact">Business enquiries</Link>
             </div>
           </div>
         </div>
 
         <div className="site-footer__support">
           <p className="site-footer__label">Need help?</p>
-          <h2>Keep your campaign moving.</h2>
+          <h2>Contact the SNT Agro team directly.</h2>
           <div className="footer-contact">
             <strong>{supportChannels[0].label}</strong>
-            <span>{supportChannels[0].value}</span>
+            <span><a href={supportChannels[0].href}>{supportChannels[0].value}</a></span>
             <small>{supportChannels[0].detail}</small>
           </div>
-          <Link href="/helpdesk" className="home-pro-text-link">Visit helpdesk <span>-&gt;</span></Link>
+          <Link href="/#contact" className="home-pro-text-link">Contact the team <span>-&gt;</span></Link>
         </div>
       </div>
-      <div className="container site-footer__bottom"><span>© 2026 SNT Rice</span><span>Retailer rewards campaign</span><Link href="/terms">Terms and campaign rules</Link></div>
+      <div className="container site-footer__bottom"><span>&copy; 2026 SNT Agro Industries Pvt. Ltd.</span><span>9953199155 | snt.agro@gmail.com</span><Link href="/terms">Terms and enquiry information</Link></div>
     </footer>
   );
 }

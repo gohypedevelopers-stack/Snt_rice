@@ -1,13 +1,102 @@
 export const publicNav = [
   { href: "/", label: "Home" },
-  { href: "/milestones", label: "Milestones" },
-  { href: "/dashboard", label: "Dashboard" },
-  { href: "/redeem", label: "Redeem" },
-  { href: "/helpdesk", label: "Helpdesk" },
-  { href: "/terms", label: "Terms" }
+  { href: "/#products", label: "Products" },
+  { href: "/#about", label: "About" },
+  { href: "/#contact", label: "Contact" }
+];
+
+export const vendorNav = [
+  { href: "/vendor", label: "Overview" },
+  { href: "/vendor/dashboard", label: "Dashboard" },
+  { href: "/vendor/invoices", label: "Invoices" },
+  { href: "/vendor/milestones", label: "Milestones" },
+  { href: "/vendor/redeem", label: "Redeem" },
+  { href: "/vendor/helpdesk", label: "Helpdesk" }
+];
+
+export const customerStats = [
+  { value: "4", label: "product categories" },
+  { value: "4", label: "works and office locations" },
+  { value: "9953199155", label: "business enquiries" }
+];
+
+export const productHighlights = [
+  {
+    title: "Trade and business supply",
+    text: "Rice, pulses, and food products are handled for wholesale, distribution, export, and institutional enquiries."
+  },
+  {
+    title: "Direct enquiry support",
+    text: "The official website is being rebuilt, so the team is taking product and business enquiries directly by call, WhatsApp, and email."
+  },
+  {
+    title: "Multiple operating locations",
+    text: "Manufacturing and office addresses across Haryana and Delhi support supply, dispatch, and commercial coordination."
+  }
+];
+
+export const productRanges = [
+  {
+    name: "Rice",
+    pack: "Available for enquiry",
+    description: "Basmati and non-basmati rice products for retail, wholesale, and trade requirements.",
+    image: "https://images.pexels.com/photos/29798195/pexels-photo-29798195.jpeg?auto=compress&cs=tinysrgb&w=1200"
+  },
+  {
+    name: "Pulses",
+    pack: "Available for enquiry",
+    description: "Selected pulse products for business supply and distribution enquiries.",
+    image: "https://images.pexels.com/photos/14238105/pexels-photo-14238105.jpeg?auto=compress&cs=tinysrgb&w=1200"
+  },
+  {
+    name: "RTS Products",
+    pack: "Available for enquiry",
+    description: "Ready-to-serve and related food product enquiries handled by the SNT team.",
+    image: "https://images.pexels.com/photos/32630924/pexels-photo-32630924.jpeg?auto=compress&cs=tinysrgb&w=1200"
+  },
+  {
+    name: "Bulk Supply",
+    pack: "Available for enquiry",
+    description: "Business enquiries for distributors, buyers, exporters, and institutional supply.",
+    image: "https://images.pexels.com/photos/32630924/pexels-photo-32630924.jpeg?auto=compress&cs=tinysrgb&w=1200"
+  }
+];
+
+export const companyValues = [
+  {
+    title: "Official website update in progress",
+    text: "SNT Agro Industries Pvt. Ltd. is rebuilding its official website and is currently handling all product and business enquiries directly."
+  },
+  {
+    title: "Wholesale and export focus",
+    text: "The team handles product, wholesale, export, and business supply requirements for buyers, distributors, and trade partners."
+  },
+  {
+    title: "Operational footprint",
+    text: "Works and office locations across Panipat and Delhi support production, storage, industrial operations, and commercial coordination."
+  }
+];
+
+export const customerGalleryImages: GalleryImage[] = [
+  {
+    src: "https://images.pexels.com/photos/29798195/pexels-photo-29798195.jpeg?auto=compress&cs=tinysrgb&w=1600",
+    alt: "Rice bags being transported through a rural field",
+    title: "Bulk rice bags"
+  },
+  {
+    src: "https://images.pexels.com/photos/14238105/pexels-photo-14238105.jpeg?auto=compress&cs=tinysrgb&w=1200",
+    alt: "Packed rice bags prepared for store and shipment handling",
+    title: "Retail pack stock"
+  },
+  {
+    src: "https://images.pexels.com/photos/32630924/pexels-photo-32630924.jpeg?auto=compress&cs=tinysrgb&w=1200",
+    alt: "Workers loading sacks of rice onto a vehicle in a field",
+    title: "Dispatch network"
+  }
 ];
 
 export const adminNav = [
+  { href: "/admin", label: "Dashboard" },
   { href: "/admin/submissions", label: "Submissions" },
   { href: "/admin/registrations", label: "Registrations" },
   { href: "/admin/slabs", label: "Slabs" },
@@ -81,6 +170,45 @@ export const flowHighlights = [
   }
 ];
 
+export const vendorWorkspaceCards = [
+  {
+    title: "Vendor dashboard",
+    href: "/vendor/dashboard",
+    status: "Live status",
+    text: "See approved bags, pending invoices, slab position, and your next action in one view."
+  },
+  {
+    title: "Invoice submissions",
+    href: "/vendor/invoices",
+    status: "Daily task",
+    text: "Submit invoice proof, quantity, and notes so the admin team can review faster."
+  },
+  {
+    title: "Milestones",
+    href: "/vendor/milestones",
+    status: "Reward tracking",
+    text: "Understand current slab position, the next target, and what unlocks after approval."
+  },
+  {
+    title: "Redemption",
+    href: "/vendor/redeem",
+    status: "Claim flow",
+    text: "Check if rewards are open and which slab gifts are currently eligible for your account."
+  },
+  {
+    title: "Helpdesk",
+    href: "/vendor/helpdesk",
+    status: "Support",
+    text: "Raise campaign questions related to login, invoices, or reward status."
+  },
+  {
+    title: "Vendor login",
+    href: "/vendor/login",
+    status: "Access",
+    text: "Open the retailer workspace using WhatsApp OTP or connected Google sign-in."
+  }
+];
+
 export const dashboardRows = [
   {
     label: "Accepted quantity",
@@ -101,19 +229,42 @@ export const dashboardRows = [
 
 export const supportChannels = [
   {
-    label: "Retailer care",
-    value: "+91 98765 43210",
-    detail: "Monday to Saturday, 10:00 AM to 6:00 PM"
+    label: "Call",
+    value: "9953199155",
+    detail: "Direct business, wholesale, export, and product enquiries",
+    href: "tel:9953199155"
+  },
+  {
+    label: "WhatsApp enquiry",
+    value: "Chat on WhatsApp",
+    detail: "Quick product and business enquiries on WhatsApp",
+    href: "https://wa.me/919953199155"
   },
   {
     label: "Email",
-    value: "support@sntrice.com",
-    detail: "For invoices, login help, and reward questions"
+    value: "snt.agro@gmail.com",
+    detail: "For product, wholesale, export, and business communication",
+    href: "mailto:snt.agro@gmail.com"
+  }
+];
+
+export const companyLocations = [
+  {
+    label: "Work 1",
+    address:
+      "Khewat No. 235/8, Khasra No. 65//23/1/3(3-10), 73//3/2(7-10) 4(3-19), Machhrauli, Samalkha, Panipat, Haryana 132101"
   },
   {
-    label: "Campaign desk",
-    value: "Mumbai operations hub",
-    detail: "Escalations, admin review, and slab changes"
+    label: "Work 2",
+    address: "Khara 33/4, Village Sannoth, Narela, Delhi 110040"
+  },
+  {
+    label: "Work 3",
+    address: "H-100, Sector 1, Bawana Industrial Area, Delhi 110039"
+  },
+  {
+    label: "Office",
+    address: "2644, 1st Floor, Naya Bazar, Delhi 110006"
   }
 ];
 
@@ -133,6 +284,24 @@ export const faqItems = [
   {
     question: "Can an admin override the slab?",
     answer: "Yes. The admin registration screen can force a specific slab for special cases or manual approvals."
+  }
+];
+
+export const adminOverviewStats = [
+  {
+    value: "4",
+    label: "operational desks",
+    detail: "Submissions, registrations, slabs, and support are separated into dedicated pages."
+  },
+  {
+    value: "24h",
+    label: "review rhythm",
+    detail: "Operators can clear invoice and support queues on a predictable daily cycle."
+  },
+  {
+    value: "1",
+    label: "control point",
+    detail: "The admin dashboard centralizes campaign moderation, slab control, and redemption readiness."
   }
 ];
 
@@ -165,18 +334,22 @@ export const termsSections = [
 
 export const adminModules = [
   {
+    href: "/admin/submissions",
     title: "Submissions",
     text: "Review invoice entries, approve or reject, and inspect Aadhaar images."
   },
   {
+    href: "/admin/registrations",
     title: "Registrations",
     text: "View retailers, apply slab overrides, and reset campaign data when required."
   },
   {
+    href: "/admin/slabs",
     title: "Slabs",
     text: "Create, edit, and delete reward tiers with attached gift images."
   },
   {
+    href: "/admin/support",
     title: "Support",
     text: "Resolve retailer tickets and keep the helpdesk queue tidy."
   }
@@ -186,6 +359,13 @@ export type GalleryImage = {
   src: string;
   alt: string;
   title: string;
+};
+
+export type SupportChannel = {
+  label: string;
+  value: string;
+  detail: string;
+  href?: string;
 };
 
 export const homeGalleryImages: GalleryImage[] = [

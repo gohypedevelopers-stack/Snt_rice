@@ -8,7 +8,7 @@ export async function GET(request: Request) {
   const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? new URL(request.url).origin;
 
   if (!clientId) {
-    return NextResponse.redirect(new URL("/login?error=google_not_configured", request.url));
+    return NextResponse.redirect(new URL("/vendor/login?error=google_not_configured", request.url));
   }
 
   const state = crypto.randomBytes(20).toString("hex");
