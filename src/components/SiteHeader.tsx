@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
-import { publicNav } from "@/lib/site-data";
+import { brandLogoSrc, publicNav } from "@/lib/site-data";
 
 export function SiteHeader() {
   const pathname = usePathname();
@@ -32,7 +32,7 @@ export function SiteHeader() {
       <div className="container site-header__inner">
         <Link href="/" className="brand" aria-label="SNT Agro home">
           <span className="brand__mark">
-            <Image src="/snt-mark.svg" alt="" width={46} height={46} priority />
+            <Image src={brandLogoSrc} alt="SNT Agro logo" width={46} height={46} priority />
           </span>
           <span className="brand__text">
             <strong>SNT Agro</strong>

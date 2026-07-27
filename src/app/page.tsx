@@ -4,6 +4,7 @@ import {
   companyLocations,
   companyValues,
   customerGalleryImages,
+  productShowcaseItems,
   customerStats,
   productHighlights,
   productRanges,
@@ -58,6 +59,35 @@ export default function HomePage() {
           <div className="customer-stat customer-stat--action">
             <span>Website update in progress</span>
             <Link href="#contact">Contact the SNT team <span aria-hidden="true">-&gt;</span></Link>
+          </div>
+        </div>
+      </section>
+
+      <section className="customer-showcase">
+        <div className="container">
+          <div className="customer-showcase__head">
+            <div>
+              <p className="customer-eyebrow">Product range</p>
+              <h2>Explore SNT product packs and variants.</h2>
+            </div>
+            <p>
+              A quick visual look at the available SNT product packaging range, including multiple pack views and
+              product variants from the local catalog images.
+            </p>
+          </div>
+
+          <div className="customer-showcase__grid">
+            {productShowcaseItems.map((item) => (
+              <article className="customer-showcase__card" key={item.src}>
+                <figure>
+                  <Image src={item.src} alt={item.alt} fill sizes="(max-width: 900px) 50vw, 20vw" />
+                </figure>
+                <div>
+                  <span>{item.note}</span>
+                  <h3>{item.title}</h3>
+                </div>
+              </article>
+            ))}
           </div>
         </div>
       </section>

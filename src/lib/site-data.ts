@@ -5,6 +5,8 @@ export const publicNav = [
   { href: "/#contact", label: "Contact" }
 ];
 
+export const brandLogoSrc = "/images/sntrice.jpg";
+
 export const vendorNav = [
   { href: "/vendor", label: "Overview" },
   { href: "/vendor/dashboard", label: "Dashboard" },
@@ -60,6 +62,20 @@ export const productRanges = [
     description: "Business enquiries for distributors, buyers, exporters, and institutional supply.",
     image: "https://images.pexels.com/photos/32630924/pexels-photo-32630924.jpeg?auto=compress&cs=tinysrgb&w=1200"
   }
+];
+
+export const productShowcaseItems = [
+  { src: "/images/snt1.jpg", alt: "SNT product pack 01 front view", title: "SNT Product 01", note: "Front pack" },
+  { src: "/images/snt1-1.jpg", alt: "SNT product pack 01 angle view", title: "SNT Product 01", note: "Alternate view" },
+  { src: "/images/snt2.jpg", alt: "SNT product pack 02 front view", title: "SNT Product 02", note: "Front pack" },
+  { src: "/images/snt2-1.jpg", alt: "SNT product pack 02 alternate view", title: "SNT Product 02", note: "Alternate view" },
+  { src: "/images/snt3.jpg", alt: "SNT product pack 03", title: "SNT Product 03", note: "Retail pack" },
+  { src: "/images/snt4.jpg", alt: "SNT product pack 04 front view", title: "SNT Product 04", note: "Front pack" },
+  { src: "/images/snt4-1.jpg", alt: "SNT product pack 04 alternate view", title: "SNT Product 04", note: "Alternate view" },
+  { src: "/images/snt5.jpg", alt: "SNT product pack 05", title: "SNT Product 05", note: "Retail pack" },
+  { src: "/images/snt6.jpg", alt: "SNT product pack 06", title: "SNT Product 06", note: "Retail pack" },
+  { src: "/images/snt7.jpg", alt: "SNT product pack 07", title: "SNT Product 07", note: "Retail pack" },
+  { src: "/images/snt8.jpg", alt: "SNT product pack 08", title: "SNT Product 08", note: "Retail pack" }
 ];
 
 export const companyValues = [

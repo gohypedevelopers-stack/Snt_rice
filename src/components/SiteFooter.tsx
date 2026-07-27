@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { publicNav, supportChannels } from "@/lib/site-data";
+import { brandLogoSrc, publicNav, supportChannels } from "@/lib/site-data";
 
 export function SiteFooter() {
   const pathname = usePathname();
@@ -17,7 +17,7 @@ export function SiteFooter() {
       <div className="container site-footer__inner">
         <div className="site-footer__intro">
           <div className="footer-brand">
-            <span className="footer-brand__mark"><Image src="/snt-mark.svg" alt="" width={42} height={42} /></span>
+            <span className="footer-brand__mark"><Image src={brandLogoSrc} alt="SNT Agro logo" width={42} height={42} /></span>
             <div>
               <strong>SNT Agro</strong>
               <span>Industries Pvt. Ltd.</span>

@@ -8,7 +8,12 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: "SNT Agro Industries Pvt. Ltd. | Rice, Pulses, and Food Products",
   description:
-    "SNT Agro Industries Pvt. Ltd. supplies rice, pulses, RTS products, and bulk food products for wholesale, export, and business enquiries."
+    "SNT Agro Industries Pvt. Ltd. supplies rice, pulses, RTS products, and bulk food products for wholesale, export, and business enquiries.",
+  icons: {
+    icon: "/images/sntrice.jpg",
+    shortcut: "/images/sntrice.jpg",
+    apple: "/images/sntrice.jpg"
+  }
 };
 
 export const viewport: Viewport = {
