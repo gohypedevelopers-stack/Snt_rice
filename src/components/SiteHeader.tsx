@@ -67,21 +67,12 @@ export function SiteHeader() {
           <a href="#products-catalog" className="site-nav__link" onClick={() => setMenuOpen(false)}>
             Catalog
           </a>
-          <a
-            href="https://wa.me/919953199155"
-            target="_blank"
-            rel="noreferrer"
-            className="site-nav__mobile-wa"
-            onClick={() => setMenuOpen(false)}
-          >
-            💬 WhatsApp Quote
-          </a>
           <Link href="/#contact" className="site-nav__mobile-cta" onClick={() => setMenuOpen(false)}>
             Contact Us
           </Link>
         </nav>
 
-        <div className="header-ecom-actions header-ecom-actions--desktop">
+        <div className="header-ecom-actions">
           <a href="https://wa.me/919953199155" target="_blank" rel="noreferrer" className="header-wa-btn">
             <span>💬 Quick WhatsApp Quote</span>
           </a>

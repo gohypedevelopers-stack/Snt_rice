@@ -46,9 +46,18 @@ export interface EcommerceProduct {
   rating: number;
   reviews: number;
   weights: string[];
+  weightPrices?: Record<string, { price: string; originalPrice?: string }>;
   price: string;
   originalPrice?: string;
   description: string;
+}
+
+export function getProductPrice(product: EcommerceProduct, weight?: string): { price: string; originalPrice?: string } {
+  const chosenWeight = weight || product.weights[0];
+  if (product.weightPrices && product.weightPrices[chosenWeight]) {
+    return product.weightPrices[chosenWeight];
+  }
+  return { price: product.price, originalPrice: product.originalPrice };
 }
 
 export const ecommerceProducts: EcommerceProduct[] = [
@@ -61,6 +70,12 @@ export const ecommerceProducts: EcommerceProduct[] = [
     rating: 4.9,
     reviews: 342,
     weights: ["5 kg", "10 kg", "26 kg", "50 kg Bulk"],
+    weightPrices: {
+      "5 kg": { price: "₹650", originalPrice: "₹780" },
+      "10 kg": { price: "₹1,250", originalPrice: "₹1,500" },
+      "26 kg": { price: "₹3,150", originalPrice: "₹3,750" },
+      "50 kg Bulk": { price: "₹5,800", originalPrice: "₹6,900" }
+    },
     price: "₹650",
     originalPrice: "₹780",
     description: "Extra long grain aged aromatic Basmati rice. Perfect for Biryani and celebratory dishes."
@@ -74,6 +89,11 @@ export const ecommerceProducts: EcommerceProduct[] = [
     rating: 4.8,
     reviews: 215,
     weights: ["5 kg", "10 kg", "26 kg"],
+    weightPrices: {
+      "5 kg": { price: "₹580", originalPrice: "₹690" },
+      "10 kg": { price: "₹1,120", originalPrice: "₹1,320" },
+      "26 kg": { price: "₹2,800", originalPrice: "₹3,300" }
+    },
     price: "₹580",
     originalPrice: "₹690",
     description: "Fluffy, non-sticky rice grains processed for exceptional aroma and taste."
@@ -87,6 +107,12 @@ export const ecommerceProducts: EcommerceProduct[] = [
     rating: 4.7,
     reviews: 189,
     weights: ["5 kg", "10 kg", "26 kg", "50 kg Bulk"],
+    weightPrices: {
+      "5 kg": { price: "₹380", originalPrice: "₹450" },
+      "10 kg": { price: "₹740", originalPrice: "₹880" },
+      "26 kg": { price: "₹1,850", originalPrice: "₹2,200" },
+      "50 kg Bulk": { price: "₹3,450", originalPrice: "₹4,100" }
+    },
     price: "₹380",
     originalPrice: "₹450",
     description: "Nutritious daily meal rice curated for softness and rich natural flavor."
@@ -100,6 +126,10 @@ export const ecommerceProducts: EcommerceProduct[] = [
     rating: 5.0,
     reviews: 412,
     weights: ["10 kg", "26 kg"],
+    weightPrices: {
+      "10 kg": { price: "₹890", originalPrice: "₹1,050" },
+      "26 kg": { price: "₹2,250", originalPrice: "₹2,650" }
+    },
     price: "₹890",
     originalPrice: "₹1,050",
     description: "Traditionally aged reserve Basmati rice with exquisite aroma and delicate texture."
@@ -113,6 +143,11 @@ export const ecommerceProducts: EcommerceProduct[] = [
     rating: 4.9,
     reviews: 156,
     weights: ["1 kg", "5 kg", "10 kg"],
+    weightPrices: {
+      "1 kg": { price: "₹190", originalPrice: "₹230" },
+      "5 kg": { price: "₹920", originalPrice: "₹1,100" },
+      "10 kg": { price: "₹1,780", originalPrice: "₹2,100" }
+    },
     price: "₹190",
     originalPrice: "₹230",
     description: "Unpolished, nutrient-packed pulse selection sourced directly from verified farms."
@@ -126,6 +161,10 @@ export const ecommerceProducts: EcommerceProduct[] = [
     rating: 4.6,
     reviews: 88,
     weights: ["500g", "1 kg"],
+    weightPrices: {
+      "500g": { price: "₹140", originalPrice: "₹175" },
+      "1 kg": { price: "₹260", originalPrice: "₹320" }
+    },
     price: "₹140",
     originalPrice: "₹175",
     description: "Quick-cook instant food solution packed under vacuum sealed hygienic conditions."
@@ -139,6 +178,11 @@ export const ecommerceProducts: EcommerceProduct[] = [
     rating: 4.9,
     reviews: 290,
     weights: ["26 kg Bag", "50 kg Bag", "1 Ton Bulk"],
+    weightPrices: {
+      "26 kg Bag": { price: "₹2,100", originalPrice: "₹2,500" },
+      "50 kg Bag": { price: "₹3,950", originalPrice: "₹4,700" },
+      "1 Ton Bulk": { price: "₹75,000", originalPrice: "₹88,000" }
+    },
     price: "₹2,100",
     originalPrice: "₹2,500",
     description: "Industrial wholesale supply packs for hotels, restaurants, caterers, and export markets."
@@ -152,6 +196,11 @@ export const ecommerceProducts: EcommerceProduct[] = [
     rating: 4.8,
     reviews: 177,
     weights: ["5 kg", "10 kg", "26 kg"],
+    weightPrices: {
+      "5 kg": { price: "₹620", originalPrice: "₹720" },
+      "10 kg": { price: "₹1,190", originalPrice: "₹1,390" },
+      "26 kg": { price: "₹2,980", originalPrice: "₹3,480" }
+    },
     price: "₹620",
     originalPrice: "₹720",
     description: "Silky textured golden grain rice with rich nutritional retention."

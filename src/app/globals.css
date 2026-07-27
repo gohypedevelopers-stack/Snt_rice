@@ -7971,22 +7971,13 @@ select {
   }
 
   /* Mobile Announcement Bar & Header Fixes */
-  .header-ecom-actions--desktop {
-    display: none !important;
+  .header-ecom-actions {
+    display: flex;
   }
 
-  .site-nav__mobile-wa {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 12px 16px;
-    background: #25d366;
-    color: #ffffff !important;
-    font-weight: 700;
-    border-radius: 8px;
-    text-decoration: none;
-    margin-top: 6px;
-    font-size: 0.9rem;
+  .header-wa-btn {
+    font-size: 0.78rem;
+    padding: 6px 12px;
   }
 
   .ecom-announcement-bar {
@@ -8044,6 +8035,274 @@ select {
     grid-template-columns: 1fr;
   }
 }
+
+/* ==========================================================================
+   Pure White Professional UI Sections
+   ========================================================================== */
+
+/* Trust & Values Section */
+.ecom-trust-section {
+  padding: 80px 0;
+  background: #ffffff;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.ecom-trust-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 28px;
+}
+
+.ecom-trust-card {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 32px 28px;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.02);
+}
+
+.ecom-trust-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.06);
+  border-color: #1f5a43;
+}
+
+.ecom-trust-card__top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 18px;
+}
+
+.ecom-trust-icon {
+  font-size: 2.2rem;
+  line-height: 1;
+  background: #eef6f2;
+  padding: 10px;
+  border-radius: 10px;
+}
+
+.ecom-trust-number {
+  font-size: 1.1rem;
+  font-weight: 900;
+  color: #946b13;
+}
+
+.ecom-trust-card h3 {
+  margin: 0 0 10px;
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #111827;
+}
+
+.ecom-trust-card p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #4b5563;
+  line-height: 1.6;
+}
+
+/* Enquiries Portal Section (Pure White Card) */
+.ecom-portal-section {
+  padding: 60px 0;
+  background: #ffffff;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.ecom-portal-card {
+  background: #ffffff;
+  border: 2px solid #1f5a43;
+  border-radius: 16px;
+  padding: 48px;
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(31, 90, 67, 0.06);
+}
+
+.ecom-portal-tag {
+  display: inline-block;
+  padding: 6px 14px;
+  background: #eef6f2;
+  color: #1f5a43;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border-radius: 4px;
+  margin-bottom: 14px;
+}
+
+.ecom-portal-card h2 {
+  margin: 0 0 12px;
+  font-size: clamp(1.8rem, 3.5vw, 2.5rem);
+  font-weight: 800;
+  color: #111827;
+}
+
+.ecom-portal-card p {
+  max-width: 680px;
+  margin: 0 auto 28px;
+  font-size: 1.02rem;
+  color: #4b5563;
+  line-height: 1.6;
+}
+
+.ecom-portal-actions {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+/* Locations Section Grid */
+.ecom-locations-section {
+  padding: 80px 0;
+  background: #ffffff;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.ecom-locations-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+
+.ecom-location-card {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 24px;
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
+}
+
+.ecom-location-card:hover {
+  transform: translateY(-3px);
+  border-color: #1f5a43;
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.06);
+}
+
+.ecom-location-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.location-pin {
+  font-size: 1.3rem;
+}
+
+.ecom-location-header h3 {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #111827;
+}
+
+.ecom-location-card p {
+  margin: 0;
+  font-size: 0.86rem;
+  color: #4b5563;
+  line-height: 1.55;
+}
+
+/* Contact Section Grid */
+.ecom-contact-section {
+  padding: 80px 0;
+  background: #ffffff;
+}
+
+.ecom-contact-grid {
+  display: grid;
+  grid-template-columns: 0.85fr 1.15fr;
+  gap: 48px;
+  align-items: start;
+}
+
+.contact-subtitle {
+  font-size: 1.02rem;
+  color: #4b5563;
+  line-height: 1.6;
+  margin-top: 12px;
+}
+
+.ecom-contact-channels {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  gap: 16px;
+}
+
+.ecom-contact-channel-card {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  padding: 22px;
+  transition: border-color 0.2s ease;
+}
+
+.ecom-contact-channel-card:hover {
+  border-color: #1f5a43;
+}
+
+.ecom-contact-channel-card span {
+  display: block;
+  font-size: 0.76rem;
+  font-weight: 800;
+  color: #946b13;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 4px;
+}
+
+.ecom-contact-channel-card strong {
+  display: block;
+  font-size: 1.15rem;
+  color: #111827;
+  margin-bottom: 4px;
+}
+
+.ecom-contact-channel-card strong a {
+  color: #1f5a43;
+  text-decoration: none;
+}
+
+.ecom-contact-channel-card strong a:hover {
+  text-decoration: underline;
+}
+
+.ecom-contact-channel-card p {
+  margin: 0;
+  font-size: 0.84rem;
+  color: #6b7280;
+}
+
+/* Responsive Queries for Pure White Sections */
+@media (max-width: 1050px) {
+  .ecom-locations-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 850px) {
+  .ecom-trust-grid {
+    grid-template-columns: 1fr;
+  }
+  .ecom-contact-grid {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+}
+
+@media (max-width: 600px) {
+  .ecom-portal-card {
+    padding: 28px 18px;
+  }
+  .ecom-locations-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 
 
 

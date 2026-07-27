@@ -11,6 +11,7 @@ import {
   supportChannels,
   ecommerceProducts,
   customerReviews,
+  getProductPrice,
   EcommerceProduct
 } from "@/lib/site-data";
 
@@ -49,14 +50,18 @@ export default function HomePage() {
 
     if (sortBy === "price-low") {
       result = [...result].sort((a, b) => {
-        const pA = parseInt(a.price.replace(/[^\d]/g, "")) || 0;
-        const pB = parseInt(b.price.replace(/[^\d]/g, "")) || 0;
+        const weightA = selectedWeights[a.id] || a.weights[0];
+        const weightB = selectedWeights[b.id] || b.weights[0];
+        const pA = parseInt(getProductPrice(a, weightA).price.replace(/[^\d]/g, "")) || 0;
+        const pB = parseInt(getProductPrice(b, weightB).price.replace(/[^\d]/g, "")) || 0;
         return pA - pB;
       });
     } else if (sortBy === "price-high") {
       result = [...result].sort((a, b) => {
-        const pA = parseInt(a.price.replace(/[^\d]/g, "")) || 0;
-        const pB = parseInt(b.price.replace(/[^\d]/g, "")) || 0;
+        const weightA = selectedWeights[a.id] || a.weights[0];
+        const weightB = selectedWeights[b.id] || b.weights[0];
+        const pA = parseInt(getProductPrice(a, weightA).price.replace(/[^\d]/g, "")) || 0;
+        const pB = parseInt(getProductPrice(b, weightB).price.replace(/[^\d]/g, "")) || 0;
         return pB - pA;
       });
     } else if (sortBy === "rating") {
@@ -64,7 +69,7 @@ export default function HomePage() {
     }
 
     return result;
-  }, [selectedCategory, searchQuery, sortBy]);
+  }, [selectedCategory, searchQuery, sortBy, selectedWeights]);
 
   const handleSelectWeight = (productId: string, weight: string) => {
     setSelectedWeights((prev) => ({ ...prev, [productId]: weight }));
@@ -95,7 +100,8 @@ export default function HomePage() {
 
   const totalCartValue = useMemo(() => {
     return cart.reduce((total, item) => {
-      const priceNum = parseInt(item.product.price.replace(/[^\d]/g, "")) || 0;
+      const priceObj = getProductPrice(item.product, item.weight);
+      const priceNum = parseInt(priceObj.price.replace(/[^\d]/g, "")) || 0;
       return total + priceNum * item.quantity;
     }, 0);
   }, [cart]);
@@ -107,9 +113,10 @@ export default function HomePage() {
     }
     let message = "Hello SNT Agro, I would like to place an order:\n\n";
     cart.forEach((item, idx) => {
-      message += `${idx + 1}. ${item.product.name} (${item.weight}) x ${item.quantity} - ${item.product.price}\n`;
+      const priceObj = getProductPrice(item.product, item.weight);
+      message += `${idx + 1}. ${item.product.name} (${item.weight}) x ${item.quantity} - ${priceObj.price}\n`;
     });
-    message += `\nEstimated Total: ₹${totalCartValue}\nPlease confirm availability and delivery timeframe.`;
+    message += `\nEstimated Total: ₹${totalCartValue.toLocaleString()}\nPlease confirm availability and delivery timeframe.`;
     window.open(`https://wa.me/919953199155?text=${encodeURIComponent(message)}`, "_blank");
   };
 
@@ -173,30 +180,33 @@ export default function HomePage() {
                 </div>
               ) : (
                 <div className="cart-item-list">
-                  {cart.map((item, index) => (
-                    <div className="cart-item" key={`${item.product.id}-${item.weight}-${index}`}>
-                      <div className="cart-item__image">
-                        <Image src={item.product.src} alt={item.product.name} width={60} height={60} />
-                      </div>
-                      <div className="cart-item__info">
-                        <h4>{item.product.name}</h4>
-                        <span className="cart-item__weight">Pack: {item.weight}</span>
-                        <div className="cart-item__qty-price">
-                          <span>Qty: {item.quantity}</span>
-                          <strong>{item.product.price}</strong>
+                  {cart.map((item, index) => {
+                    const priceObj = getProductPrice(item.product, item.weight);
+                    return (
+                      <div className="cart-item" key={`${item.product.id}-${item.weight}-${index}`}>
+                        <div className="cart-item__image">
+                          <Image src={item.product.src} alt={item.product.name} width={60} height={60} />
                         </div>
+                        <div className="cart-item__info">
+                          <h4>{item.product.name}</h4>
+                          <span className="cart-item__weight">Pack: {item.weight}</span>
+                          <div className="cart-item__qty-price">
+                            <span>Qty: {item.quantity}</span>
+                            <strong>{priceObj.price}</strong>
+                          </div>
+                        </div>
+                        <button
+                          type="button"
+                          className="cart-item__remove"
+                          onClick={() =>
+                            setCart((prev) => prev.filter((_, i) => i !== index))
+                          }
+                        >
+                          🗑️
+                        </button>
                       </div>
-                      <button
-                        type="button"
-                        className="cart-item__remove"
-                        onClick={() =>
-                          setCart((prev) => prev.filter((_, i) => i !== index))
-                        }
-                      >
-                        🗑️
-                      </button>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
               )}
             </div>
@@ -205,7 +215,7 @@ export default function HomePage() {
               <div className="ecom-cart-drawer__footer">
                 <div className="cart-summary-line">
                   <span>Subtotal (Estimated)</span>
-                  <strong>₹{totalCartValue}</strong>
+                  <strong>₹{totalCartValue.toLocaleString()}</strong>
                 </div>
                 <p className="cart-note">Final price and tax invoice confirmed on checkout.</p>
                 <button
@@ -229,121 +239,124 @@ export default function HomePage() {
       )}
 
       {/* Product Quick View Modal */}
-      {quickViewProduct && (
-        <div className="ecom-modal-scrim" onClick={() => setQuickViewProduct(null)}>
-          <div className="ecom-quickview-modal" onClick={(e) => e.stopPropagation()}>
-            <button
-              type="button"
-              className="quickview-close"
-              onClick={() => setQuickViewProduct(null)}
-            >
-              ✕
-            </button>
+      {quickViewProduct && (() => {
+        const qvWeight = selectedWeights[quickViewProduct.id] || quickViewProduct.weights[0];
+        const qvPriceObj = getProductPrice(quickViewProduct, qvWeight);
+        return (
+          <div className="ecom-modal-scrim" onClick={() => setQuickViewProduct(null)}>
+            <div className="ecom-quickview-modal" onClick={(e) => e.stopPropagation()}>
+              <button
+                type="button"
+                className="quickview-close"
+                onClick={() => setQuickViewProduct(null)}
+              >
+                ✕
+              </button>
 
-            <div className="quickview-grid">
-              <div className="quickview-media">
-                <Image
-                  src={quickViewProduct.src}
-                  alt={quickViewProduct.name}
-                  fill
-                  sizes="40vw"
-                  className="quickview-img"
-                />
-              </div>
-
-              <div className="quickview-content">
-                <span className="quickview-tag">{quickViewProduct.tag}</span>
-                <h2>{quickViewProduct.name}</h2>
-                <div className="rating-stars">
-                  <span>★★★★★ {quickViewProduct.rating}</span>
-                  <small>({quickViewProduct.reviews} customer reviews)</small>
+              <div className="quickview-grid">
+                <div className="quickview-media">
+                  <Image
+                    src={quickViewProduct.src}
+                    alt={quickViewProduct.name}
+                    fill
+                    sizes="40vw"
+                    className="quickview-img"
+                  />
                 </div>
 
-                <div className="quickview-price-row">
-                  <span className="price-main">{quickViewProduct.price}</span>
-                  {quickViewProduct.originalPrice && (
-                    <span className="price-old">{quickViewProduct.originalPrice}</span>
-                  )}
-                  <span className="tax-info">Inclusive of all taxes</span>
-                </div>
+                <div className="quickview-content">
+                  <span className="quickview-tag">{quickViewProduct.tag}</span>
+                  <h2>{quickViewProduct.name}</h2>
+                  <div className="rating-stars">
+                    <span>★★★★★ {quickViewProduct.rating}</span>
+                    <small>({quickViewProduct.reviews} customer reviews)</small>
+                  </div>
 
-                <p className="quickview-desc">{quickViewProduct.description}</p>
+                  <div className="quickview-price-row">
+                    <span className="price-main">{qvPriceObj.price}</span>
+                    {qvPriceObj.originalPrice && (
+                      <span className="price-old">{qvPriceObj.originalPrice}</span>
+                    )}
+                    <span className="tax-info">Inclusive of all taxes</span>
+                  </div>
 
-                {/* Grain & Quality Specs */}
-                <div className="quickview-specs">
-                  <div className="spec-item">
-                    <span>Grain Elongation:</span>
-                    <strong>Extra Long (2x Expansion)</strong>
-                  </div>
-                  <div className="spec-item">
-                    <span>Aroma Score:</span>
-                    <strong>Authentic Natural Fragrance</strong>
-                  </div>
-                  <div className="spec-item">
-                    <span>Moisture Content:</span>
-                    <strong>Below 12.5% (Aged Standard)</strong>
-                  </div>
-                  <div className="spec-item">
-                    <span>Origin:</span>
-                    <strong>Panipat & Karnal Paddy Belt</strong>
-                  </div>
-                </div>
+                  <p className="quickview-desc">{quickViewProduct.description}</p>
 
-                {/* Pack Weight Selector */}
-                <div className="quickview-weight-selector">
-                  <label>Select Pack Size:</label>
-                  <div className="weight-options">
-                    {quickViewProduct.weights.map((w) => {
-                      const selected =
-                        (selectedWeights[quickViewProduct.id] || quickViewProduct.weights[0]) === w;
-                      return (
-                        <button
-                          key={w}
-                          type="button"
-                          className={selected ? "weight-pill weight-pill--active" : "weight-pill"}
-                          onClick={() => handleSelectWeight(quickViewProduct.id, w)}
-                        >
-                          {w}
-                        </button>
-                      );
-                    })}
+                  {/* Grain & Quality Specs */}
+                  <div className="quickview-specs">
+                    <div className="spec-item">
+                      <span>Grain Elongation:</span>
+                      <strong>Extra Long (2x Expansion)</strong>
+                    </div>
+                    <div className="spec-item">
+                      <span>Aroma Score:</span>
+                      <strong>Authentic Natural Fragrance</strong>
+                    </div>
+                    <div className="spec-item">
+                      <span>Moisture Content:</span>
+                      <strong>Below 12.5% (Aged Standard)</strong>
+                    </div>
+                    <div className="spec-item">
+                      <span>Origin:</span>
+                      <strong>Panipat & Karnal Paddy Belt</strong>
+                    </div>
                   </div>
-                </div>
 
-                {/* Quantity Adjustment */}
-                <div className="quickview-action-row">
-                  <div className="qty-counter">
+                  {/* Pack Weight Selector */}
+                  <div className="quickview-weight-selector">
+                    <label>Select Pack Size:</label>
+                    <div className="weight-options">
+                      {quickViewProduct.weights.map((w) => {
+                        const selected = qvWeight === w;
+                        return (
+                          <button
+                            key={w}
+                            type="button"
+                            className={selected ? "weight-pill weight-pill--active" : "weight-pill"}
+                            onClick={() => handleSelectWeight(quickViewProduct.id, w)}
+                          >
+                            {w}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  {/* Quantity Adjustment */}
+                  <div className="quickview-action-row">
+                    <div className="qty-counter">
+                      <button
+                        type="button"
+                        onClick={() => setQuickViewQuantity((q) => Math.max(1, q - 1))}
+                      >
+                        -
+                      </button>
+                      <span>{quickViewQuantity}</span>
+                      <button
+                        type="button"
+                        onClick={() => setQuickViewQuantity((q) => q + 1)}
+                      >
+                        +
+                      </button>
+                    </div>
+
                     <button
                       type="button"
-                      onClick={() => setQuickViewQuantity((q) => Math.max(1, q - 1))}
+                      className="btn btn--primary-ecom"
+                      onClick={() => {
+                        handleAddToCart(quickViewProduct, quickViewQuantity, qvWeight);
+                        setQuickViewProduct(null);
+                      }}
                     >
-                      -
-                    </button>
-                    <span>{quickViewQuantity}</span>
-                    <button
-                      type="button"
-                      onClick={() => setQuickViewQuantity((q) => q + 1)}
-                    >
-                      +
+                      Add {quickViewQuantity} to Bag
                     </button>
                   </div>
-
-                  <button
-                    type="button"
-                    className="btn btn--primary-ecom"
-                    onClick={() => {
-                      handleAddToCart(quickViewProduct, quickViewQuantity);
-                      setQuickViewProduct(null);
-                    }}
-                  >
-                    Add {quickViewQuantity} to Bag
-                  </button>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-      )}
+        );
+      })()}
 
       {/* Modern E-Commerce Hero */}
       <section className="ecom-hero">
@@ -397,50 +410,77 @@ export default function HomePage() {
           </div>
 
           <div className="ecom-hero__banner">
-            <div className="hero-product-card">
-              <div className="hero-product-card__badge">🔥 Best Seller</div>
-              <div className="hero-product-card__image-wrap">
-                <Image
-                  src="/images/snt1.jpg"
-                  alt="SNT Royal Basmati Rice"
-                  fill
-                  priority
-                  sizes="(max-width: 900px) 100vw, 45vw"
-                  className="hero-product-card__img"
-                />
-              </div>
-              <div className="hero-product-card__info">
-                <h3>SNT Premium Royal Basmati Rice</h3>
-                <div className="rating-stars">
-                  <span>★★★★★</span>
-                  <small>(342 verified reviews)</small>
+            {(() => {
+              const heroProduct = ecommerceProducts[0];
+              const heroWeight = selectedWeights[heroProduct.id] || heroProduct.weights[0];
+              const heroPriceObj = getProductPrice(heroProduct, heroWeight);
+              return (
+                <div className="hero-product-card">
+                  <div className="hero-product-card__badge">🔥 Best Seller</div>
+                  <div className="hero-product-card__image-wrap">
+                    <Image
+                      src="/images/snt1.jpg"
+                      alt="SNT Royal Basmati Rice"
+                      fill
+                      priority
+                      sizes="(max-width: 900px) 100vw, 45vw"
+                      className="hero-product-card__img"
+                    />
+                  </div>
+                  <div className="hero-product-card__info">
+                    <h3>SNT Premium Royal Basmati Rice</h3>
+                    <div className="rating-stars">
+                      <span>★★★★★</span>
+                      <small>(342 verified reviews)</small>
+                    </div>
+
+                    {/* Weight pills in Hero */}
+                    <div className="ecom-weight-selector" style={{ marginBottom: "12px" }}>
+                      <span className="weight-label">Pack size:</span>
+                      <div className="weight-options">
+                        {heroProduct.weights.map((w) => (
+                          <button
+                            key={w}
+                            type="button"
+                            className={heroWeight === w ? "weight-pill weight-pill--active" : "weight-pill"}
+                            onClick={() => handleSelectWeight(heroProduct.id, w)}
+                          >
+                            {w}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div className="hero-product-card__price">
+                      <span className="current-price">{heroPriceObj.price}</span>
+                      {heroPriceObj.originalPrice && (
+                        <span className="old-price">{heroPriceObj.originalPrice}</span>
+                      )}
+                    </div>
+
+                    <div className="hero-card-buttons">
+                      <button
+                        type="button"
+                        className="btn btn--cart-quick"
+                        onClick={() => handleAddToCart(heroProduct, 1, heroWeight)}
+                      >
+                        Quick Add +
+                      </button>
+                      <button
+                        type="button"
+                        className="btn btn--quickview"
+                        onClick={() => {
+                          setQuickViewProduct(heroProduct);
+                          setQuickViewQuantity(1);
+                        }}
+                      >
+                        Quick View 👁️
+                      </button>
+                    </div>
+                  </div>
                 </div>
-                <div className="hero-product-card__price">
-                  <span className="current-price">₹650</span>
-                  <span className="old-price">₹780</span>
-                  <span className="discount-tag">16% OFF</span>
-                </div>
-                <div className="hero-card-buttons">
-                  <button
-                    type="button"
-                    className="btn btn--cart-quick"
-                    onClick={() => handleAddToCart(ecommerceProducts[0])}
-                  >
-                    Quick Add +
-                  </button>
-                  <button
-                    type="button"
-                    className="btn btn--quickview"
-                    onClick={() => {
-                      setQuickViewProduct(ecommerceProducts[0]);
-                      setQuickViewQuantity(1);
-                    }}
-                  >
-                    Quick View 👁️
-                  </button>
-                </div>
-              </div>
-            </div>
+              );
+            })()}
           </div>
         </div>
       </section>
@@ -554,6 +594,7 @@ export default function HomePage() {
             <div className="ecom-product-grid">
               {filteredAndSortedProducts.map((product) => {
                 const currentWeight = selectedWeights[product.id] || product.weights[0];
+                const currentPriceObj = getProductPrice(product, currentWeight);
                 return (
                   <article className="ecom-product-card" key={product.id}>
                     <div className="ecom-product-card__media">
@@ -615,14 +656,16 @@ export default function HomePage() {
 
                       <div className="ecom-product-card__footer">
                         <div className="ecom-price-box">
-                          <span className="price-main">{product.price}</span>
-                          {product.originalPrice && <span className="price-old">{product.originalPrice}</span>}
+                          <span className="price-main">{currentPriceObj.price}</span>
+                          {currentPriceObj.originalPrice && (
+                            <span className="price-old">{currentPriceObj.originalPrice}</span>
+                          )}
                         </div>
 
                         <button
                           type="button"
                           className="btn btn--add-cart"
-                          onClick={() => handleAddToCart(product)}
+                          onClick={() => handleAddToCart(product, 1, currentWeight)}
                         >
                           Add to Bag
                         </button>
@@ -721,57 +764,68 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Company Trust & Values */}
-      <section className="customer-section customer-section--white border-top-light">
+      {/* Company Trust & Values (Pure White & Modern UI) */}
+      <section className="ecom-trust-section">
         <div className="container">
-          <div className="customer-section__head customer-section__head--wide">
-            <p className="customer-eyebrow">Why Choose SNT Agro</p>
+          <div className="ecom-section-center">
+            <p className="ecom-section-eyebrow">Why Choose SNT Agro</p>
             <h2>Uncompromised Quality & Reliable Business Supply</h2>
           </div>
-          <div className="customer-value-grid">
-            {companyValues.map((item, index) => (
-              <article className="customer-value" key={item.title}>
-                <span>{String(index + 1).padStart(2, "0")}</span>
-                <h3>{item.title}</h3>
-                <p>{item.text}</p>
-              </article>
-            ))}
+
+          <div className="ecom-trust-grid">
+            {companyValues.map((item, index) => {
+              const icons = ["🏭", "🌍", "🌾"];
+              return (
+                <article className="ecom-trust-card" key={item.title}>
+                  <div className="ecom-trust-card__top">
+                    <span className="ecom-trust-icon">{icons[index % icons.length]}</span>
+                    <span className="ecom-trust-number">0{index + 1}</span>
+                  </div>
+                  <h3>{item.title}</h3>
+                  <p>{item.text}</p>
+                </article>
+              );
+            })}
           </div>
         </div>
       </section>
 
-      {/* Wholesale & Institutional Enquiries Portal */}
-      <section className="customer-portals">
-        <div className="container customer-portals__single">
-          <article className="customer-portal customer-portal--public">
-            <span>Wholesale & Export Enquiries</span>
+      {/* Wholesale & Institutional Enquiries Portal (Pure White Box) */}
+      <section className="ecom-portal-section">
+        <div className="container">
+          <div className="ecom-portal-card">
+            <span className="ecom-portal-tag">Wholesale & Export Enquiries</span>
             <h2>Direct Factory Order Support for Trade Buyers</h2>
             <p>
-              Need bulk quantity bags for commercial, retail, or export requirements? Our sales team provides customized pricing and instant order processing.
+              Need bulk quantity bags for commercial, retail, or export requirements? Our sales team provides customized pricing, sample testing, and instant order processing.
             </p>
-            <div className="customer-portal__actions">
-              <Link href="https://wa.me/919953199155" className="btn btn--dark">
-                Instant WhatsApp Quote
+            <div className="ecom-portal-actions">
+              <Link href="https://wa.me/919953199155" target="_blank" rel="noreferrer" className="btn btn--primary-ecom">
+                💬 Instant WhatsApp Quote
               </Link>
-              <Link href="#contact" className="customer-text-link">
-                View Contact Info <span>-&gt;</span>
+              <Link href="#contact" className="btn btn--outline-ecom">
+                📞 View Contact Info →
               </Link>
             </div>
-          </article>
+          </div>
         </div>
       </section>
 
-      {/* Locations */}
-      <section className="customer-section customer-section--white">
+      {/* Locations (Pure White Modern Card Grid) */}
+      <section className="ecom-locations-section">
         <div className="container">
-          <div className="customer-section__head customer-section__head--wide">
-            <p className="customer-eyebrow">Operating Units</p>
+          <div className="ecom-section-center">
+            <p className="ecom-section-eyebrow">Operating Units</p>
             <h2>Works & Office Locations</h2>
           </div>
-          <div className="customer-location-grid">
+
+          <div className="ecom-locations-grid">
             {companyLocations.map((location) => (
-              <article className="customer-location" key={location.label}>
-                <span>{location.label}</span>
+              <article className="ecom-location-card" key={location.label}>
+                <div className="ecom-location-header">
+                  <span className="location-pin">📍</span>
+                  <h3>{location.label}</h3>
+                </div>
                 <p>{location.address}</p>
               </article>
             ))}
@@ -779,16 +833,20 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Contact Section */}
-      <section id="contact" className="customer-contact">
-        <div className="container customer-contact__grid">
-          <div>
-            <p className="customer-eyebrow">Get In Touch</p>
+      {/* Contact Section (Pure White Clean Layout) */}
+      <section id="contact" className="ecom-contact-section">
+        <div className="container ecom-contact-grid">
+          <div className="ecom-contact-info">
+            <p className="ecom-section-eyebrow">Get In Touch</p>
             <h2>Reach SNT Agro Industries Pvt. Ltd.</h2>
+            <p className="contact-subtitle">
+              Have questions regarding product catalog, bulk pricing, or mill dispatches? Reach out directly via Phone, WhatsApp, or Email.
+            </p>
           </div>
-          <div className="customer-contact__channels">
+
+          <div className="ecom-contact-channels">
             {supportChannels.map((item) => (
-              <div className="customer-contact__item" key={item.label}>
+              <div className="ecom-contact-channel-card" key={item.label}>
                 <span>{item.label}</span>
                 {item.href ? (
                   <strong>
@@ -796,23 +854,8 @@ export default function HomePage() {
                       href={item.href}
                       target={item.href.startsWith("http") ? "_blank" : undefined}
                       rel={item.href.startsWith("http") ? "noreferrer" : undefined}
-                      className={isExternalWhatsApp(item.href) ? "contact-action contact-action--whatsapp" : "contact-action"}
                     >
-                      {isExternalWhatsApp(item.href) ? (
-                        <>
-                          <span className="contact-action__icon" aria-hidden="true">
-                            <svg viewBox="0 0 24 24">
-                              <path
-                                fill="currentColor"
-                                d="M19.05 4.94A9.9 9.9 0 0 0 12 2a9.93 9.93 0 0 0-8.61 14.88L2 22l5.28-1.38A9.93 9.93 0 1 0 19.05 4.94ZM12 20.13a8.1 8.1 0 0 1-4.13-1.13l-.3-.18-3.13.82.84-3.05-.2-.31A8.12 8.12 0 1 1 12 20.13Zm4.45-6.08c-.24-.12-1.4-.69-1.62-.77-.21-.08-.36-.12-.52.12-.15.23-.6.77-.73.93-.13.16-.26.18-.49.06a6.64 6.64 0 0 1-1.95-1.2 7.34 7.34 0 0 1-1.35-1.68c-.14-.23-.01-.35.1-.47.1-.1.23-.26.34-.39.11-.13.14-.22.22-.37.07-.15.04-.29-.02-.41-.06-.12-.52-1.25-.71-1.71-.19-.45-.38-.39-.52-.4h-.44c-.15 0-.4.06-.6.29-.21.23-.8.78-.8 1.89s.82 2.19.93 2.34c.12.15 1.63 2.49 3.95 3.5.55.24.98.38 1.31.49.55.17 1.05.15 1.44.09.44-.07 1.4-.57 1.6-1.12.2-.56.2-1.03.14-1.13-.05-.1-.2-.16-.43-.28Z"
-                              />
-                            </svg>
-                          </span>
-                          <span>{item.value}</span>
-                        </>
-                      ) : (
-                        item.value
-                      )}
+                      {item.value}
                     </a>
                   </strong>
                 ) : (
