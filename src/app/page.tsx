@@ -419,7 +419,7 @@ export default function HomePage() {
                   <div className="hero-product-card__badge">🔥 Best Seller</div>
                   <div className="hero-product-card__image-wrap">
                     <Image
-                      src="/images/snt1.jpg"
+                      src={heroProduct.src}
                       alt="SNT Royal Basmati Rice"
                       fill
                       priority

@@ -7,6 +7,19 @@ export const publicNav = [
 
 export const brandLogoSrc = "/images/sntrice.jpg";
 
+// The latest upload currently provides six JPEG files. Keep the catalog rendering
+// by pointing missing slots to existing pack shots until snt7/snt8 are added.
+export const productImageSrc = {
+  snt1: "/images/snt1.jpeg",
+  snt2: "/images/snt2.jpeg",
+  snt3: "/images/snt3.jpeg",
+  snt4: "/images/snt4.jpeg",
+  snt5: "/images/snt5.jpeg",
+  snt6: "/images/snt6.jpeg",
+  snt7: "/images/snt6.jpeg",
+  snt8: "/images/snt4.jpeg"
+} as const;
+
 export const vendorNav = [
   { href: "/vendor", label: "Overview" },
   { href: "/vendor/dashboard", label: "Dashboard" },
@@ -65,7 +78,7 @@ export const ecommerceProducts: EcommerceProduct[] = [
     id: "snt-01",
     name: "SNT Premium Royal Basmati Rice",
     category: "Basmati Rice",
-    src: "/images/snt1.jpg",
+    src: productImageSrc.snt1,
     tag: "Best Seller",
     rating: 4.9,
     reviews: 342,
@@ -84,7 +97,7 @@ export const ecommerceProducts: EcommerceProduct[] = [
     id: "snt-02",
     name: "SNT Silver XL Extra Long Grain Rice",
     category: "Basmati Rice",
-    src: "/images/snt2.jpg",
+    src: productImageSrc.snt2,
     tag: "Export Grade",
     rating: 4.8,
     reviews: 215,
@@ -102,7 +115,7 @@ export const ecommerceProducts: EcommerceProduct[] = [
     id: "snt-03",
     name: "SNT Daily Feast Classic Rice",
     category: "Non-Basmati Rice",
-    src: "/images/snt3.jpg",
+    src: productImageSrc.snt3,
     tag: "Popular",
     rating: 4.7,
     reviews: 189,
@@ -121,7 +134,7 @@ export const ecommerceProducts: EcommerceProduct[] = [
     id: "snt-04",
     name: "SNT Heritage Tradition Basmati",
     category: "Basmati Rice",
-    src: "/images/snt4.jpg",
+    src: productImageSrc.snt4,
     tag: "Premium Quality",
     rating: 5.0,
     reviews: 412,
@@ -138,7 +151,7 @@ export const ecommerceProducts: EcommerceProduct[] = [
     id: "snt-05",
     name: "SNT Select Organic Pulses & Dal",
     category: "Pulses & Dal",
-    src: "/images/snt5.jpg",
+    src: productImageSrc.snt5,
     tag: "High Protein",
     rating: 4.9,
     reviews: 156,
@@ -156,7 +169,7 @@ export const ecommerceProducts: EcommerceProduct[] = [
     id: "snt-06",
     name: "SNT Ready-To-Serve Gourmet Pack",
     category: "RTS Foods",
-    src: "/images/snt6.jpg",
+    src: productImageSrc.snt6,
     tag: "New Arrival",
     rating: 4.6,
     reviews: 88,
@@ -173,7 +186,7 @@ export const ecommerceProducts: EcommerceProduct[] = [
     id: "snt-07",
     name: "SNT Commercial Bulk Rice Sacks",
     category: "Wholesale Bulk",
-    src: "/images/snt7.jpg",
+    src: productImageSrc.snt7,
     tag: "Wholesale Special",
     rating: 4.9,
     reviews: 290,
@@ -191,7 +204,7 @@ export const ecommerceProducts: EcommerceProduct[] = [
     id: "snt-08",
     name: "SNT Superfine Golden Grain Rice",
     category: "Basmati Rice",
-    src: "/images/snt8.jpg",
+    src: productImageSrc.snt8,
     tag: "Top Rated",
     rating: 4.8,
     reviews: 177,
@@ -229,7 +242,7 @@ export const productCategoriesData: ProductCategoryItem[] = [
     count: "4 Variants Available",
     pack: "1kg • 5kg • 10kg • 26kg",
     description: "Extra long-grain aged aromatic Basmati rice. Double polished & optically sorted for fine dining & exports.",
-    image: "/images/snt1.jpg",
+    image: productImageSrc.snt1,
     icon: "🌾",
     features: ["Aged 2+ Years", "Extra Long Elongation", "Natural Aroma"]
   },
@@ -241,7 +254,7 @@ export const productCategoriesData: ProductCategoryItem[] = [
     count: "3 Variants Available",
     pack: "5kg • 10kg • 26kg • 50kg",
     description: "High-yield daily consumption rice varieties engineered for softness, high nutritional retention, and superior taste.",
-    image: "/images/snt3.jpg",
+    image: productImageSrc.snt3,
     icon: "🥣",
     features: ["High Yield", "Soft Texture", "Zero Impurities"]
   },
@@ -253,7 +266,7 @@ export const productCategoriesData: ProductCategoryItem[] = [
     count: "2 Variants Available",
     pack: "1kg • 5kg • 10kg",
     description: "Farm-fresh protein rich pulse selection cleaned and packaged without any chemical polishing or artificial coloring.",
-    image: "/images/snt5.jpg",
+    image: productImageSrc.snt5,
     icon: "🫘",
     features: ["Unpolished", "High Protein", "Farm Sourced"]
   },
@@ -265,21 +278,21 @@ export const productCategoriesData: ProductCategoryItem[] = [
     count: "Institutional Sacks",
     pack: "26kg • 50kg • 1 Ton Bulk",
     description: "Industrial wholesale supply bags for hotels, restaurants, caterers, retail chains, and international export partners.",
-    image: "/images/snt7.jpg",
+    image: productImageSrc.snt7,
     icon: "📦",
     features: ["Direct Mill Rates", "Custom Branding", "Bulk Logistics"]
   }
 ];
 
 export const productShowcaseItems = [
-  { src: "/images/snt1.jpg", alt: "SNT Royal Basmati Rice Pack", title: "Royal Basmati 5kg", note: "Best Seller" },
-  { src: "/images/snt2.jpg", alt: "SNT XL Long Grain Rice Pack", title: "XL Long Grain 10kg", note: "Export Quality" },
-  { src: "/images/snt3.jpg", alt: "SNT Daily Feast Rice Pack", title: "Daily Feast 26kg", note: "Value Pack" },
-  { src: "/images/snt4.jpg", alt: "SNT Heritage Reserve Basmati", title: "Heritage Reserve 10kg", note: "Aged 2 Years" },
-  { src: "/images/snt5.jpg", alt: "SNT Organic Pulses Selection", title: "Organic Pulses 5kg", note: "100% Unpolished" },
-  { src: "/images/snt6.jpg", alt: "SNT RTS Gourmet Pack", title: "RTS Gourmet Pack", note: "Instant Ready" },
-  { src: "/images/snt7.jpg", alt: "SNT Commercial Bulk Supply", title: "Bulk Wholesale Sack", note: "Factory Direct" },
-  { src: "/images/snt8.jpg", alt: "SNT Superfine Golden Grain", title: "Golden Grain 5kg", note: "Premium Quality" }
+  { src: productImageSrc.snt1, alt: "SNT Royal Basmati Rice Pack", title: "Royal Basmati 5kg", note: "Best Seller" },
+  { src: productImageSrc.snt2, alt: "SNT XL Long Grain Rice Pack", title: "XL Long Grain 10kg", note: "Export Quality" },
+  { src: productImageSrc.snt3, alt: "SNT Daily Feast Rice Pack", title: "Daily Feast 26kg", note: "Value Pack" },
+  { src: productImageSrc.snt4, alt: "SNT Heritage Reserve Basmati", title: "Heritage Reserve 10kg", note: "Aged 2 Years" },
+  { src: productImageSrc.snt5, alt: "SNT Organic Pulses Selection", title: "Organic Pulses 5kg", note: "100% Unpolished" },
+  { src: productImageSrc.snt6, alt: "SNT RTS Gourmet Pack", title: "RTS Gourmet Pack", note: "Instant Ready" },
+  { src: productImageSrc.snt7, alt: "SNT Commercial Bulk Supply", title: "Bulk Wholesale Sack", note: "Factory Direct" },
+  { src: productImageSrc.snt8, alt: "SNT Superfine Golden Grain", title: "Golden Grain 5kg", note: "Premium Quality" }
 ];
 
 export const companyValues = [

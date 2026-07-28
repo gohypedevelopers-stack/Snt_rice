@@ -6312,7 +6312,9 @@ select {
 }
 
 .hero-product-card__img {
-  object-fit: cover;
+  object-fit: contain;
+  object-position: center;
+  padding: 12px;
 }
 
 .hero-product-card__info {
@@ -6533,7 +6535,9 @@ select {
 }
 
 .ecom-product-card__img {
-  object-fit: cover;
+  object-fit: contain;
+  object-position: center;
+  padding: 12px;
   transition: transform 0.3s ease;
 }
 
@@ -7210,7 +7214,9 @@ select {
 }
 
 .quickview-img {
-  object-fit: cover;
+  object-fit: contain;
+  object-position: center;
+  padding: 16px;
 }
 
 .quickview-content {
@@ -7581,7 +7587,9 @@ select {
 }
 
 .ecom-cat-card__img {
-  object-fit: cover;
+  object-fit: contain;
+  object-position: center;
+  padding: 12px;
   transition: transform 0.4s ease;
 }
 
@@ -8302,7 +8310,6 @@ select {
     grid-template-columns: 1fr;
   }
 }
-
 
 
 
