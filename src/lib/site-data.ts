@@ -5,7 +5,7 @@ export const publicNav = [
   { href: "/#contact", label: "Contact" }
 ];
 
-export const brandLogoSrc = "/images/sntrice.jpg";
+export const brandLogoSrc = "/images/SNTE LOGO.png";
 
 // The latest upload currently provides six JPEG files. Keep the catalog rendering
 // by pointing missing slots to existing pack shots until snt7/snt8 are added.

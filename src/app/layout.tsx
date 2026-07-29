@@ -9,9 +9,9 @@ export const metadata: Metadata = {
   description:
     "SNT Agro Industries Pvt. Ltd. supplies rice, pulses, RTS products, and bulk food products for wholesale, export, and business enquiries.",
   icons: {
-    icon: "/images/sntrice.jpg",
-    shortcut: "/images/sntrice.jpg",
-    apple: "/images/sntrice.jpg"
+    icon: "/images/SNTE LOGO.png",
+    shortcut: "/images/SNTE LOGO.png",
+    apple: "/images/SNTE LOGO.png"
   }
 };
 

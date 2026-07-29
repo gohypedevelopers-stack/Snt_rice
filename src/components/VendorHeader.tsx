@@ -1,9 +1,10 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import { usePathname } from "next/navigation";
-import { vendorNav } from "@/lib/site-data";
+import { brandLogoSrc, vendorNav } from "@/lib/site-data";
 
 function isActive(pathname: string | null, href: string) {
   if (!pathname) {
@@ -25,8 +26,11 @@ export function VendorHeader() {
     <header className="vendor-header">
       <div className="container vendor-header__inner">
         <Link href="/vendor" className="vendor-header__brand" aria-label="SNT Rice vendor portal">
-          <span>SNT Rice</span>
-          <strong>Vendor Portal</strong>
+          <Image src={brandLogoSrc} alt="SNT Agro logo" width={34} height={34} className="vendor-brand-logo" />
+          <div>
+            <span>SNT Rice</span>
+            <strong>Vendor Portal</strong>
+          </div>
         </Link>
 
         <button
