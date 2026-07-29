@@ -1,128 +1,227 @@
+import Image from "next/image";
 import Link from "next/link";
 import {
   campaignSteps,
   dashboardRows,
   flowHighlights,
+  productShowcaseItems,
   supportChannels,
   vendorWorkspaceCards
 } from "@/lib/site-data";
 
 export default function VendorOverviewPage() {
   return (
-    <div className="vendor-page">
-      <section className="vendor-overview-hero">
-        <div className="container vendor-overview-hero__grid">
-          <div className="vendor-overview-hero__copy">
-            <p className="section-heading__eyebrow">Vendor workspace</p>
-            <h1>Everything a retailer needs now lives under `/vendor`.</h1>
-            <p>
-              This section keeps invoice submissions, reward milestones, redemption pages, and support tasks separate
-              from the public company website so vendors can move directly into campaign work.
-            </p>
-            <div className="vendor-overview-hero__actions">
-              <Link href="/vendor/dashboard" className="btn btn--dark">
-                Open dashboard
-              </Link>
-              <Link href="/vendor/login" className="btn btn--light">
-                Vendor sign in
-              </Link>
-            </div>
-          </div>
-
-          <div className="vendor-overview-hero__stats">
-            {dashboardRows.map((item) => (
-              <article className="vendor-overview-stat" key={item.label}>
-                <span>{item.label}</span>
-                <strong>{item.value}</strong>
-                <p>{item.detail}</p>
-              </article>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="vendor-overview-section">
+    <div className="vendor-page vendor-page--ecom-style">
+      {/* Vendor Premium Hero Banner */}
+      <section className="vendor-v2-hero">
         <div className="container">
-          <div className="vendor-overview-section__head">
-            <div>
-              <p className="section-heading__eyebrow">Workspace pages</p>
-              <h2>Dedicated pages for each vendor task.</h2>
-            </div>
+          <div className="vendor-v2-hero__top">
+            <span className="vendor-v2-badge">
+              <span className="badge-dot" /> Retailer & Partner Portal
+            </span>
+            <h1>SNT Agro Partner Workspace</h1>
             <p>
-              Vendors no longer land on the public homepage for operational work. They can start directly from this
-              portal and move page by page.
+              Manage invoice submissions, track tier milestone slabs, inspect real-time bag counts, and redeem campaign rewards in one place.
+            </p>
+
+            <div className="vendor-v2-hero__actions">
+              <Link href="/vendor/dashboard" className="btn btn--primary-ecom btn--hero-v2">
+                Launch Vendor Dashboard →
+              </Link>
+              <Link href="/vendor/invoices" className="btn btn--outline-ecom btn--hero-v2">
+                Submit Invoice Proof 🧾
+              </Link>
+              <Link href="/vendor/login" className="btn btn--ghost-ecom btn--hero-v2">
+                Retailer Login
+              </Link>
+            </div>
+          </div>
+
+          {/* Hero Live Stats Cards */}
+          <div className="vendor-v2-stats-grid">
+            <div className="v2-stat-card v2-stat-card--highlight">
+              <div className="v2-stat-icon">📦</div>
+              <div>
+                <small>Accepted Bag Volume</small>
+                <strong>184 Bags</strong>
+                <span>Across 5 verified invoices</span>
+              </div>
+            </div>
+            <div className="v2-stat-card">
+              <div className="v2-stat-icon">🎯</div>
+              <div>
+                <small>Active Reward Tier</small>
+                <strong>Level 3 Slab</strong>
+                <span>Target: 200 bags (16 bags away)</span>
+              </div>
+            </div>
+            <div className="v2-stat-card">
+              <div className="v2-stat-icon">🎁</div>
+              <div>
+                <small>Redemption Status</small>
+                <strong>Ready to Claim</strong>
+                <span>Unlocked on campaign window</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Feature Highlights Bar */}
+      <section className="ecom-features-bar">
+        <div className="container ecom-features-bar__grid">
+          <div className="feature-item">
+            <div className="feature-item__icon">📊</div>
+            <div>
+              <strong>Live Dashboard</strong>
+              <p>Real-time bag count & slab updates.</p>
+            </div>
+          </div>
+          <div className="feature-item">
+            <div className="feature-item__icon">🧾</div>
+            <div>
+              <strong>Quick Invoice Proof</strong>
+              <p>Upload bill photos & quantity notes.</p>
+            </div>
+          </div>
+          <div className="feature-item">
+            <div className="feature-item__icon">🏆</div>
+            <div>
+              <strong>Milestone Rewards</strong>
+              <p>Unlock appliances & flagship gifts.</p>
+            </div>
+          </div>
+          <div className="feature-item">
+            <div className="feature-item__icon">💬</div>
+            <div>
+              <strong>WhatsApp Support</strong>
+              <p>Direct priority line for retailers.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Product Line Images Grid Showcase */}
+      <section className="vendor-ecom-section vendor-ecom-section--soft">
+        <div className="container">
+          <div className="ecom-section-center">
+            <p className="ecom-section-eyebrow">Product Portfolio</p>
+            <h2>SNT Agro Mill Product Varieties</h2>
+            <p className="ecom-section-subtitle">
+              All product lines eligible for vendor invoices, bulk orders, and retailer slab points.
             </p>
           </div>
 
-          <div className="vendor-workspace-grid">
-            {vendorWorkspaceCards.map((item) => (
-              <article className="vendor-workspace-card" key={item.href}>
-                <span>{item.status}</span>
-                <h3>{item.title}</h3>
-                <p>{item.text}</p>
-                <Link href={item.href}>Open page</Link>
-              </article>
+          <div className="vendor-products-showcase-grid">
+            {productShowcaseItems.map((item) => (
+              <div className="product-showcase-card" key={item.title}>
+                <div className="showcase-img-wrap">
+                  <Image src={item.src} alt={item.alt} fill sizes="(max-width: 768px) 50vw, 25vw" className="showcase-img" />
+                  <span className="showcase-badge">{item.note}</span>
+                </div>
+                <h4>{item.title}</h4>
+              </div>
             ))}
           </div>
         </div>
       </section>
 
-      <section className="vendor-overview-section vendor-overview-section--soft">
-        <div className="container vendor-overview-process">
-          <div className="vendor-overview-section__head">
-            <div>
-              <p className="section-heading__eyebrow">Vendor flow</p>
-              <h2>Simple movement from registration to reward claim.</h2>
-            </div>
-            <p>
-              The process is split into clean steps so retailers can understand what happens before and after every
-              invoice review.
+      {/* Workspace Modules Section */}
+      <section className="vendor-ecom-section">
+        <div className="container">
+          <div className="ecom-section-center">
+            <p className="ecom-section-eyebrow">Workspace Navigation</p>
+            <h2>Dedicated Portal Pages for Retailers</h2>
+            <p className="ecom-section-subtitle">
+              Jump straight into your required operational page with one click.
             </p>
           </div>
 
-          <div className="vendor-process-grid">
+          <div className="vendor-workspace-ecom-grid">
+            {vendorWorkspaceCards.map((item, idx) => {
+              const icons = ["📊", "🧾", "🎯", "🎁", "🎧", "🔐"];
+              return (
+                <article className="vendor-card-ecom" key={item.href}>
+                  <div className="vendor-card-ecom__top">
+                    <span className="vendor-card-ecom__icon">{icons[idx % icons.length]}</span>
+                    <span className="vendor-card-ecom__status">{item.status}</span>
+                  </div>
+                  <h3>{item.title}</h3>
+                  <p>{item.text}</p>
+                  <Link href={item.href} className="vendor-card-ecom__link">
+                    Open {item.title} <span aria-hidden="true">→</span>
+                  </Link>
+                </article>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* Vendor Step-by-Step Flow */}
+      <section className="vendor-ecom-section vendor-ecom-section--soft">
+        <div className="container">
+          <div className="ecom-section-center">
+            <p className="ecom-section-eyebrow">Retailer Journey</p>
+            <h2>Simple 4-Step Reward Process</h2>
+            <p className="ecom-section-subtitle">
+              Clear path from shop registration to unlocking your campaign slab reward.
+            </p>
+          </div>
+
+          <div className="vendor-steps-ecom-grid">
             {campaignSteps.map((item, index) => (
-              <article className="vendor-process-card" key={item.title}>
-                <span>{String(index + 1).padStart(2, "0")}</span>
+              <article className="vendor-step-ecom-card" key={item.title}>
+                <div className="step-num">0{index + 1}</div>
                 <h3>{item.title}</h3>
                 <p>{item.text}</p>
               </article>
             ))}
           </div>
 
-          <div className="vendor-highlight-grid">
+          <div className="vendor-highlights-ecom-grid">
             {flowHighlights.map((item) => (
-              <article className="vendor-highlight-card" key={item.title}>
-                <h3>{item.title}</h3>
-                <p>{item.text}</p>
+              <article className="vendor-hl-card" key={item.title}>
+                <div className="hl-check">✓</div>
+                <div>
+                  <h4>{item.title}</h4>
+                  <p>{item.text}</p>
+                </div>
               </article>
             ))}
           </div>
         </div>
       </section>
 
-      <section className="vendor-overview-section">
-        <div className="container vendor-support-grid">
-          <div>
-            <p className="section-heading__eyebrow">Support contacts</p>
-            <h2>Fast contact routes when a vendor needs help.</h2>
+      {/* Support Contacts Section */}
+      <section className="vendor-ecom-section">
+        <div className="container">
+          <div className="ecom-portal-card">
+            <span className="ecom-portal-tag">Direct Vendor Helpdesk</span>
+            <h2>Need Quick Assistance with your Account?</h2>
             <p>
-              Contact details stay visible inside the portal so login, invoice, and redemption issues can be escalated
-              without leaving the vendor section.
+              Our team is ready to help you with invoice verification, slab calculations, and redemption status updates.
             </p>
-          </div>
 
-          <div className="vendor-support-cards">
-            {supportChannels.map((item) => (
-              <article className="vendor-support-card" key={item.label}>
-                <span>{item.label}</span>
-                <strong>{item.value}</strong>
-                <p>{item.detail}</p>
-              </article>
-            ))}
+            <div className="vendor-support-ecom-grid">
+              {supportChannels.map((item) => (
+                <a
+                  href={item.href || "#"}
+                  target={item.href?.startsWith("http") ? "_blank" : undefined}
+                  rel={item.href?.startsWith("http") ? "noreferrer" : undefined}
+                  className="vendor-support-ecom-card"
+                  key={item.label}
+                >
+                  <span className="sup-label">{item.label}</span>
+                  <strong className="sup-val">{item.value}</strong>
+                  <p className="sup-det">{item.detail}</p>
+                </a>
+              ))}
+            </div>
           </div>
         </div>
       </section>
     </div>
   );
 }
+
