@@ -1,200 +1,249 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
+import { useState } from "react";
 import { faqItems, helpdeskGalleryImages, supportChannels } from "@/lib/site-data";
 
-const supportStats = [
-  { label: "Open tickets", value: "3", detail: "1 waiting on review" },
-  { label: "Response window", value: "24h", detail: "Business-day SLA" },
-  { label: "Campaign desk", value: "Live", detail: "Retailer support active" }
-];
-
-const ticketTypes = ["Login", "Submission", "Reward", "Other"];
+const ticketTypes = ["Login Issue", "Submission Query", "Reward Status", "General Support"];
 
 export default function HelpdeskPage() {
+  const [submitted, setSubmitted] = useState(false);
+
+  function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    setSubmitted(true);
+  }
+
   return (
-    <div className="helpdesk-page">
-      <section className="helpdesk-hero">
-        <div className="container helpdesk-hero__grid">
-          <div className="helpdesk-hero__copy">
+    <div className="v2-dashboard-page">
+      {/* Top Header Section */}
+      <section className="v2-dash-hero">
+        <div className="container">
+          <div className="v2-dash-hero__head">
             <div>
-              <p className="helpdesk-eyebrow">Helpdesk</p>
-              <h1>Retailer support, ticket intake, and campaign assistance.</h1>
-              <p>
-                A structured support workspace for resolving login issues, invoice questions, reward status concerns,
-                and retailer follow-ups without losing campaign context.
+              <span className="v2-badge">
+                <span className="badge-dot" /> Retailer Support Desk
+              </span>
+              <h1>Retailer Helpdesk & Support</h1>
+              <p className="v2-subtitle">
+                Raise questions regarding invoice verifications, slab targets, login access, or campaign rewards with prompt assistance.
               </p>
             </div>
 
-            <div className="helpdesk-hero__meta">
-              <span>Rahim Traders</span>
-              <span>SNT Rice Wholesale</span>
-              <span>Pune</span>
-            </div>
-
-            <div className="helpdesk-hero__actions">
-              <Link href="/vendor/invoices" className="btn btn--dark">
-                Submit invoice
+            <div className="v2-dash-hero__right">
+              <Link href="/vendor/dashboard" className="btn btn--outline-ecom">
+                ← Vendor Dashboard
               </Link>
-              <Link href="/vendor/dashboard" className="btn btn--light">
-                Back to dashboard
+              <Link href="/vendor/invoices" className="btn btn--primary-ecom">
+                Submit Invoice +
               </Link>
-            </div>
-
-            <div className="helpdesk-summary" aria-label="Support summary">
-              {supportStats.map((stat) => (
-                <div key={stat.label}>
-                  <strong>{stat.value}</strong>
-                  <span>{stat.label}</span>
-                  <p>{stat.detail}</p>
-                </div>
-              ))}
             </div>
           </div>
 
-          <div className="helpdesk-hero__visual" aria-label="SNT Rice support visuals">
-            <figure className="helpdesk-photo helpdesk-photo--main">
-              <Image
-                src={helpdeskGalleryImages[0].src}
-                alt={helpdeskGalleryImages[0].alt}
-                fill
-                priority
-                sizes="(max-width: 900px) 100vw, 54vw"
-              />
-            </figure>
-            <figure className="helpdesk-photo">
-              <Image
-                src={helpdeskGalleryImages[1].src}
-                alt={helpdeskGalleryImages[1].alt}
-                fill
-                sizes="(max-width: 900px) 50vw, 18vw"
-              />
-              <figcaption>{helpdeskGalleryImages[1].title}</figcaption>
-            </figure>
-            <figure className="helpdesk-photo">
-              <Image
-                src={helpdeskGalleryImages[2].src}
-                alt={helpdeskGalleryImages[2].alt}
-                fill
-                sizes="(max-width: 900px) 50vw, 18vw"
-              />
-              <figcaption>{helpdeskGalleryImages[2].title}</figcaption>
-            </figure>
-
-            <div className="helpdesk-status-card">
-              <span>Support availability</span>
-              <strong>Mon-Sat, 10 AM-6 PM</strong>
-              <p>Campaign support is available for invoice, login, and reward questions.</p>
+          {/* Metric KPI Cards */}
+          <div className="v2-dash-kpi-grid">
+            <div className="v2-kpi-card v2-kpi-card--green">
+              <div className="v2-kpi-top">
+                <span>Support Desk SLA</span>
+                <span className="v2-kpi-icon">⚡</span>
+              </div>
+              <strong>24 Hours</strong>
+              <small>Average response time</small>
             </div>
 
-            <div className="helpdesk-visual-strip" aria-label="Helpdesk status">
-              <div>
-                <span>Priority</span>
-                <strong>Retailer care</strong>
+            <div className="v2-kpi-card v2-kpi-card--gold">
+              <div className="v2-kpi-top">
+                <span>Hotline Hours</span>
+                <span className="v2-kpi-icon">📞</span>
               </div>
-              <div>
-                <span>Escalation</span>
-                <strong>Campaign desk</strong>
+              <strong>10 AM - 6 PM</strong>
+              <small>Monday to Saturday support</small>
+            </div>
+
+            <div className="v2-kpi-card">
+              <div className="v2-kpi-top">
+                <span>Support Queue</span>
+                <span className="v2-kpi-icon">💬</span>
               </div>
-              <div>
-                <span>Queue state</span>
-                <strong>Active</strong>
+              <strong>Active Care</strong>
+              <small>Direct retailer assistance</small>
+            </div>
+
+            <div className="v2-kpi-card">
+              <div className="v2-kpi-top">
+                <span>Resolution Rate</span>
+                <span className="v2-kpi-icon">✓</span>
               </div>
+              <strong>99.4%</strong>
+              <small>Verified retailer satisfaction</small>
             </div>
           </div>
         </div>
       </section>
 
-      <section className="helpdesk-main">
-        <div className="container helpdesk-main__grid">
-          <article className="helpdesk-panel helpdesk-panel--form">
-            <div className="helpdesk-panel__head">
-              <div>
-                <p className="helpdesk-eyebrow">Support ticket</p>
-                <h2>Raise a retailer support request</h2>
-              </div>
-              <span className="status status--pending">Draft</span>
-            </div>
-
-            <div className="helpdesk-form-grid">
-              <div className="field">
-                <label htmlFor="support-phone">Phone</label>
-                <input id="support-phone" type="tel" placeholder="+91 98765 43210" />
-              </div>
-              <div className="field">
-                <label htmlFor="support-category">Category</label>
-                <select id="support-category" defaultValue="submission">
-                  {ticketTypes.map((type) => (
-                    <option value={type.toLowerCase()} key={type}>
-                      {type}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <div className="field">
-                <label htmlFor="support-reference">Reference</label>
-                <input id="support-reference" type="text" placeholder="Invoice, phone, or reward ID" />
-              </div>
-              <div className="field">
-                <label htmlFor="support-priority">Priority</label>
-                <select id="support-priority" defaultValue="normal">
-                  <option value="normal">Normal</option>
-                  <option value="urgent">Urgent</option>
-                  <option value="follow-up">Follow-up</option>
-                </select>
-              </div>
-            </div>
-
-            <div className="field field--spaced">
-              <label htmlFor="support-message">Message</label>
-              <textarea id="support-message" rows={5} placeholder="Describe the issue, invoice status, or reward question" />
-            </div>
-
-            <div className="helpdesk-form-actions">
-              <button type="button" className="btn btn--dark">
-                Send ticket
-              </button>
-              <button type="button" className="btn btn--light">
-                Save draft
-              </button>
-            </div>
-          </article>
-
-          <aside className="helpdesk-panel">
-            <div className="helpdesk-panel__head helpdesk-panel__head--stacked">
-              <p className="helpdesk-eyebrow">Contact channels</p>
-              <h2>Support routing</h2>
-            </div>
-
-            <div className="helpdesk-channel-list">
-              {supportChannels.map((item) => (
-                <div className="helpdesk-channel" key={item.label}>
-                  <span>{item.label}</span>
-                  <strong>{item.value}</strong>
-                  <p>{item.detail}</p>
+      {/* Main Support Grid Section */}
+      <section className="v2-dash-section">
+        <div className="container v2-dash-grid">
+          {/* Main Left Column */}
+          <div className="v2-dash-main-col">
+            {/* Support Form Panel */}
+            <div className="v2-panel">
+              <div className="v2-panel__head">
+                <div>
+                  <span className="v2-panel-eyebrow">Support Intake</span>
+                  <h2>Raise a Ticket</h2>
                 </div>
-              ))}
-            </div>
-          </aside>
+                <span className="v2-status-chip v2-status-chip--accepted">
+                  Direct Line
+                </span>
+              </div>
 
-          <article className="helpdesk-panel helpdesk-panel--faq">
-            <div className="helpdesk-panel__head">
-              <div>
-                <p className="helpdesk-eyebrow">Knowledge base</p>
-                <h2>Frequently asked questions</h2>
+              {submitted ? (
+                <div className="v2-form-success">
+                  ✅ <strong>Support Ticket Submitted!</strong>
+                  <p style={{ margin: "6px 0 0", color: "#1f5a43", fontSize: "0.88rem" }}>
+                    Our retailer support team will review your query and respond via WhatsApp or call within 24 hours.
+                  </p>
+                </div>
+              ) : (
+                <form onSubmit={handleSubmit} className="v2-form-grid-layout">
+                  <div className="v2-field-row">
+                    <div className="v2-field">
+                      <label htmlFor="support-phone">WhatsApp / Phone Number *</label>
+                      <input id="support-phone" type="tel" placeholder="+91 98765 43210" required />
+                    </div>
+
+                    <div className="v2-field">
+                      <label htmlFor="support-category">Category *</label>
+                      <select id="support-category" defaultValue="submission" className="v2-select-input">
+                        {ticketTypes.map((type) => (
+                          <option value={type.toLowerCase()} key={type}>
+                            {type}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+
+                  <div className="v2-field-row">
+                    <div className="v2-field">
+                      <label htmlFor="support-reference">Reference Invoice / Account ID</label>
+                      <input id="support-reference" type="text" placeholder="e.g. INV-9821 or Shop Name" />
+                    </div>
+
+                    <div className="v2-field">
+                      <label htmlFor="support-priority">Urgency Level</label>
+                      <select id="support-priority" defaultValue="normal" className="v2-select-input">
+                        <option value="normal">Normal (Routine Query)</option>
+                        <option value="urgent">Urgent (Invoice Review Needed)</option>
+                        <option value="follow-up">Follow-up (Existing Ticket)</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div className="v2-field">
+                    <label htmlFor="support-message">Detailed Message *</label>
+                    <textarea
+                      id="support-message"
+                      rows={4}
+                      placeholder="Explain your invoice, slab, or reward question in detail..."
+                      required
+                    />
+                  </div>
+
+                  <div className="v2-form-actions">
+                    <button type="submit" className="btn btn--primary-ecom">
+                      Submit Ticket →
+                    </button>
+                    <Link href="/vendor/dashboard" className="btn btn--ghost-ecom">
+                      Cancel
+                    </Link>
+                  </div>
+                </form>
+              )}
+            </div>
+
+            {/* Knowledge Base FAQ Section */}
+            <div className="v2-panel">
+              <div className="v2-panel__head">
+                <div>
+                  <span className="v2-panel-eyebrow">Knowledge Base</span>
+                  <h2>Frequently Asked Questions</h2>
+                </div>
+              </div>
+
+              <div className="v2-faq-accordion-list">
+                {faqItems.map((item) => (
+                  <details className="v2-faq-card" key={item.question}>
+                    <summary className="v2-faq-summary">
+                      <strong>{item.question}</strong>
+                      <span className="faq-toggle-icon">+</span>
+                    </summary>
+                    <div className="v2-faq-body">
+                      <p>{item.answer}</p>
+                    </div>
+                  </details>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Right Sidebar Column */}
+          <div className="v2-dash-side-col">
+            {/* Direct Contact Channels */}
+            <div className="v2-panel">
+              <div className="v2-panel__head v2-panel__head--stacked">
+                <span className="v2-panel-eyebrow">Direct Helpline</span>
+                <h2>Contact Channels</h2>
+              </div>
+
+              <div className="v2-channel-cards-list">
+                {supportChannels.map((item) => (
+                  <a
+                    href={item.href || "#"}
+                    target={item.href?.startsWith("http") ? "_blank" : undefined}
+                    rel={item.href?.startsWith("http") ? "noreferrer" : undefined}
+                    className="v2-channel-card"
+                    key={item.label}
+                  >
+                    <span className="channel-tag">{item.label}</span>
+                    <strong className="channel-val">{item.value}</strong>
+                    <p className="channel-det">{item.detail}</p>
+                  </a>
+                ))}
+              </div>
+
+              <div className="v2-info-callout">
+                <strong>📌 Campaign Notice</strong>
+                <p>
+                  For faster processing, please attach your invoice number or shop registration phone number when contacting support.
+                </p>
               </div>
             </div>
 
-            <div className="helpdesk-faq-grid">
-              {faqItems.map((item) => (
-                <details className="helpdesk-faq" key={item.question}>
-                  <summary>{item.question}</summary>
-                  <p>{item.answer}</p>
-                </details>
-              ))}
+            {/* Helpdesk Visual Showcase */}
+            <div className="v2-panel v2-visual-card">
+              <div className="v2-visual-media">
+                <Image
+                  src={helpdeskGalleryImages[0].src}
+                  alt={helpdeskGalleryImages[0].alt}
+                  fill
+                  sizes="30vw"
+                  className="v2-visual-img"
+                />
+                <div className="v2-visual-overlay" />
+                <span className="v2-visual-badge">🎧 Dedicated Care</span>
+              </div>
+              <div className="v2-visual-content">
+                <h4>SNT Agro Support Desk</h4>
+                <p>Ensuring transparent campaign tracking and reliable reward delivery for every retailer partner.</p>
+              </div>
             </div>
-          </article>
+          </div>
         </div>
       </section>
     </div>
   );
 }
+

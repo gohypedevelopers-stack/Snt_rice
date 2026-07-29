@@ -1,177 +1,215 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
 import { milestoneGalleryImages, rewardSlabs } from "@/lib/site-data";
 
 const slabProgress = [
-  { percent: "20%", label: "50 bags" },
-  { percent: "40%", label: "100 bags" },
-  { percent: "80%", label: "200 bags" },
-  { percent: "100%", label: "250+ bags" }
+  { percent: "20%", label: "50 bags (L1)" },
+  { percent: "40%", label: "100 bags (L2)" },
+  { percent: "80%", label: "200 bags (L3)" },
+  { percent: "100%", label: "250+ bags (Mega)" }
 ];
 
 export default function MilestonesPage() {
   return (
-    <div className="milestones-page">
-      <section className="milestone-hero">
-        <div className="container milestone-hero__grid">
-          <div className="milestone-hero__copy">
+    <div className="v2-dashboard-page">
+      {/* Top Header Section */}
+      <section className="v2-dash-hero">
+        <div className="container">
+          <div className="v2-dash-hero__head">
             <div>
-              <p className="milestone-eyebrow">Milestones</p>
-              <h1>Milestone overview</h1>
-              <p>
-                Track approved bags, current slab, and the next reward target for the active SNT Rice campaign.
+              <span className="v2-badge">
+                <span className="badge-dot" /> Campaign Milestone Tracking
+              </span>
+              <h1>Retailer Reward Tier Slabs</h1>
+              <p className="v2-subtitle">
+                Track your approved bag count progress and see what gifts you unlock at each milestone level.
               </p>
             </div>
 
-            <div className="milestone-hero__meta">
-              <span>Rahim Traders</span>
-              <span>SNT Rice Wholesale</span>
-              <span>Pune</span>
-            </div>
-
-            <div className="milestone-hero__actions">
-              <Link href="/vendor/dashboard" className="btn btn--dark">
-                View progress
+            <div className="v2-dash-hero__right">
+              <Link href="/vendor/dashboard" className="btn btn--outline-ecom">
+                ← Vendor Dashboard
               </Link>
-              <Link href="/vendor/redeem" className="btn btn--light">
-                Check rewards
+              <Link href="/vendor/redeem" className="btn btn--primary-ecom">
+                Claim Rewards 🎁
               </Link>
-            </div>
-
-            <div className="milestone-summary" aria-label="Campaign slab summary">
-              <div>
-                <strong>184</strong>
-                <span>approved bags</span>
-              </div>
-              <div>
-                <strong>Level 3</strong>
-                <span>current slab</span>
-              </div>
-              <div>
-                <strong>66</strong>
-                <span>bags to mega</span>
-              </div>
             </div>
           </div>
 
-          <div className="milestone-hero__visual" aria-label="SNT Rice campaign visuals">
-            <figure className="milestone-photo milestone-photo--main">
-              <Image
-                src={milestoneGalleryImages[0].src}
-                alt={milestoneGalleryImages[0].alt}
-                fill
-                priority
-                sizes="(max-width: 900px) 100vw, 44vw"
-              />
-              <figcaption>{milestoneGalleryImages[0].title}</figcaption>
-            </figure>
-            <figure className="milestone-photo">
-              <Image
-                src={milestoneGalleryImages[1].src}
-                alt={milestoneGalleryImages[1].alt}
-                fill
-                sizes="(max-width: 900px) 50vw, 20vw"
-              />
-              <figcaption>{milestoneGalleryImages[1].title}</figcaption>
-            </figure>
-            <figure className="milestone-photo">
-              <Image
-                src={milestoneGalleryImages[2].src}
-                alt={milestoneGalleryImages[2].alt}
-                fill
-                sizes="(max-width: 900px) 50vw, 20vw"
-              />
-              <figcaption>{milestoneGalleryImages[2].title}</figcaption>
-            </figure>
-            <div className="milestone-visual-card">
-              <span>Current progress</span>
-              <strong>184 / 250 bags</strong>
-              <p>Mega reward is 66 approved bags away.</p>
+          {/* Metric KPI Cards */}
+          <div className="v2-dash-kpi-grid">
+            <div className="v2-kpi-card v2-kpi-card--green">
+              <div className="v2-kpi-top">
+                <span>Approved Bag Total</span>
+                <span className="v2-kpi-icon">📦</span>
+              </div>
+              <strong>184 Bags</strong>
+              <small>Verified across approved invoices</small>
             </div>
-            <div className="milestone-visual-strip" aria-label="Milestone status">
-              <div>
-                <span>Current slab</span>
-                <strong>Level 3</strong>
+
+            <div className="v2-kpi-card v2-kpi-card--gold">
+              <div className="v2-kpi-top">
+                <span>Current Active Tier</span>
+                <span className="v2-kpi-icon">🏆</span>
               </div>
-              <div>
-                <span>Gift status</span>
-                <strong>Ready soon</strong>
+              <strong>Level 3 Slab</strong>
+              <small>Unlocked at 150+ approved bags</small>
+            </div>
+
+            <div className="v2-kpi-card">
+              <div className="v2-kpi-top">
+                <span>Next Milestone Target</span>
+                <span className="v2-kpi-icon">🎯</span>
               </div>
-              <div>
-                <span>Review state</span>
-                <strong>1 pending</strong>
+              <strong>250+ Bags</strong>
+              <small>66 bags remaining for Mega Tier</small>
+            </div>
+
+            <div className="v2-kpi-card">
+              <div className="v2-kpi-top">
+                <span>Campaign Gift Window</span>
+                <span className="v2-kpi-icon">🎁</span>
               </div>
+              <strong>Ready to Claim</strong>
+              <small>Level 1, Level 2 & Level 3 unlocked</small>
             </div>
           </div>
         </div>
       </section>
 
-      <section className="milestone-band">
-        <div className="container milestone-progress">
-          <div className="milestone-section-head">
-            <p className="milestone-eyebrow">Current position</p>
-            <h2>Level 3 is active. Mega unlocks at 250 bags.</h2>
-          </div>
-
-          <div className="milestone-meter" aria-label="Slab progress toward 250 bags">
-            <div className="milestone-meter__track">
-              <span className="milestone-meter__fill" />
-              {slabProgress.map((item) => (
-                <span className="milestone-meter__point" style={{ left: item.percent }} key={item.label}>
-                  <span>{item.label}</span>
-                </span>
-              ))}
-            </div>
-          </div>
-
-          <div className="milestone-rewards">
-            {rewardSlabs.map((slab, index) => (
-              <article className={index < 3 ? "milestone-reward milestone-reward--active" : "milestone-reward"} key={slab.level}>
-                <div className="milestone-reward__top">
-                  <span>{slab.tone}</span>
-                  <strong>{slab.level}</strong>
+      {/* Main Milestone Progress & Rewards Section */}
+      <section className="v2-dash-section">
+        <div className="container v2-dash-grid">
+          {/* Main Left Column */}
+          <div className="v2-dash-main-col">
+            {/* Progress Meter Panel */}
+            <div className="v2-panel v2-progress-panel">
+              <div className="v2-panel__head">
+                <div>
+                  <span className="v2-panel-eyebrow">Tier Progression</span>
+                  <h2>Level 3 Active • 73.6% Toward Mega Tier</h2>
                 </div>
-                <p className="milestone-reward__target">{slab.target}</p>
-                <p className="milestone-reward__gift">{slab.gift}</p>
-                <div className="milestone-reward__status">{index < 3 ? "Unlocked" : "Next target"}</div>
-              </article>
-            ))}
-          </div>
-        </div>
-      </section>
+                <span className="progress-percent-chip">184 / 250 Bags</span>
+              </div>
 
-      <section className="milestone-ops">
-        <div className="container milestone-ops__grid">
-          <div className="milestone-section-head">
-            <p className="milestone-eyebrow">Campaign logic</p>
-            <h2>Clear rules make the slab ladder easier to trust.</h2>
+              <div className="v2-meter-wrap">
+                <div className="v2-meter-bar">
+                  <div className="v2-meter-fill" style={{ width: "73.6%" }} />
+                </div>
+                <div className="v2-meter-labels">
+                  <span>Current: <strong>184 Bags</strong></span>
+                  <span>Target: <strong>250+ Bags (Mega Tier)</strong></span>
+                </div>
+              </div>
+
+              <p className="v2-meter-note">
+                💡 Submit <strong>66 more approved bags</strong> before campaign end to upgrade to the top Mega Tier reward!
+              </p>
+            </div>
+
+            {/* Reward Tier Cards Grid */}
+            <div className="v2-panel">
+              <div className="v2-panel__head">
+                <div>
+                  <span className="v2-panel-eyebrow">Reward Ladder</span>
+                  <h2>SNT Campaign Reward Slabs</h2>
+                </div>
+                <Link href="/vendor/invoices" className="btn btn--outline-ecom btn--sm">
+                  + Add Invoices to Level Up
+                </Link>
+              </div>
+
+              <div className="v2-rewards-tier-grid">
+                {rewardSlabs.map((slab, index) => {
+                  const isUnlocked = index < 3;
+                  return (
+                    <div
+                      className={isUnlocked ? "v2-tier-card v2-tier-card--unlocked" : "v2-tier-card"}
+                      key={slab.level}
+                    >
+                      <div className="v2-tier-top">
+                        <span className="v2-tier-tone">{slab.tone}</span>
+                        <span className={isUnlocked ? "v2-tier-badge v2-tier-badge--active" : "v2-tier-badge"}>
+                          {isUnlocked ? "✓ Unlocked" : "Locked"}
+                        </span>
+                      </div>
+                      <h3>{slab.level}</h3>
+                      <div className="v2-tier-target">{slab.target}</div>
+                      <p className="v2-tier-gift">{slab.gift}</p>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
           </div>
 
-          <div className="milestone-rule-grid">
-            <article className="milestone-rule">
-              <span>01</span>
-              <div>
-                <h3>Approved bags only</h3>
-                <p>Pending or rejected submissions stay out of the slab total until an operator accepts them.</p>
+          {/* Right Sidebar Column */}
+          <div className="v2-dash-side-col">
+            {/* Campaign Rules & Logic */}
+            <div className="v2-panel">
+              <div className="v2-panel__head v2-panel__head--stacked">
+                <span className="v2-panel-eyebrow">Campaign Rules</span>
+                <h2>Slab Criteria & Rules</h2>
               </div>
-            </article>
-            <article className="milestone-rule">
-              <span>02</span>
-              <div>
-                <h3>Next target stays visible</h3>
-                <p>The retailer always sees the distance to the next reward, even before redemption opens.</p>
+
+              <div className="v2-checklist-items">
+                <div className="v2-check-item">
+                  <span className="check-num">01</span>
+                  <div>
+                    <strong>Approved Bags Only</strong>
+                    <p>Only verified and accepted invoice bag counts count toward your milestone ladder.</p>
+                  </div>
+                </div>
+
+                <div className="v2-check-item">
+                  <span className="check-num">02</span>
+                  <div>
+                    <strong>Cumulative Volume</strong>
+                    <p>Submissions pile up throughout the active 2026 campaign period.</p>
+                  </div>
+                </div>
+
+                <div className="v2-check-item">
+                  <span className="check-num">03</span>
+                  <div>
+                    <strong>Tier Upgrades</strong>
+                    <p>Reaching a higher bag target automatically elevates your claim eligibility.</p>
+                  </div>
+                </div>
               </div>
-            </article>
-            <article className="milestone-rule">
-              <span>03</span>
-              <div>
-                <h3>Rewards unlock together</h3>
-                <p>Gift claiming opens only after the campaign team releases redemption from the admin console.</p>
+
+              <div className="v2-info-callout">
+                <strong>🎁 Claiming Rewards</strong>
+                <p>
+                  Once campaign redemption opens, unlocked gifts can be claimed directly from your vendor account or via support hotline.
+                </p>
               </div>
-            </article>
+            </div>
+
+            {/* Milestone Visual Showcase Card */}
+            <div className="v2-panel v2-visual-card">
+              <div className="v2-visual-media">
+                <Image
+                  src={milestoneGalleryImages[0].src}
+                  alt={milestoneGalleryImages[0].alt}
+                  fill
+                  sizes="30vw"
+                  className="v2-visual-img"
+                />
+                <div className="v2-visual-overlay" />
+                <span className="v2-visual-badge">🏆 Tier Verified</span>
+              </div>
+              <div className="v2-visual-content">
+                <h4>Verified Retailer Growth</h4>
+                <p>Track your movement up the SNT Agro rewards ladder with complete transparency.</p>
+              </div>
+            </div>
           </div>
         </div>
       </section>
     </div>
   );
 }
+

@@ -17,9 +17,10 @@ type DashboardPayload = {
 };
 
 const actionItems = [
-  { title: "Submit another invoice", status: "New", href: "/vendor/invoices", text: "Add invoice date, number, quantity, and proof." },
-  { title: "Check reward eligibility", status: "Progress", href: "/vendor/milestones", text: "See the remaining approved bags for your next tier." },
-  { title: "Contact helpdesk", status: "Support", href: "/vendor/helpdesk", text: "Raise a ticket if a submission or reward status looks wrong." }
+  { icon: "🧾", title: "Submit new invoice", status: "Action Needed", href: "/vendor/invoices", text: "Upload bill photo, invoice date, number, and quantity bags." },
+  { icon: "🎯", title: "View milestone slabs", status: "In Progress", href: "/vendor/milestones", text: "Check your remaining bag target to unlock the next reward tier." },
+  { icon: "🎁", title: "Claim unlocked gift", status: "Status Check", href: "/vendor/redeem", text: "Review eligible rewards and check global campaign claim availability." },
+  { icon: "💬", title: "Retailer helpdesk", status: "24/7 Support", href: "/vendor/helpdesk", text: "Raise questions directly with the campaign management team." }
 ];
 
 export default function DashboardPage() {
@@ -39,56 +40,198 @@ export default function DashboardPage() {
   const invoices = dashboard?.invoices ?? [];
 
   return (
-    <div className="dashboard-page">
-      <section className="dashboard-hero">
-        <div className="container dashboard-hero__grid">
-          <div className="dashboard-hero__copy">
+    <div className="v2-dashboard-page">
+      {/* Top Header Section */}
+      <section className="v2-dash-hero">
+        <div className="container">
+          <div className="v2-dash-hero__head">
             <div>
-              <p className="dashboard-eyebrow">Retailer dashboard</p>
-              <div className="dashboard-title-row">
-                <div>
-                  <h1>{dashboard?.user.name ?? "Your retailer workspace"}</h1>
-                  <p>{dashboard ? `${dashboard.user.shopName}, ${dashboard.user.city}` : "Sign in to load your campaign account"}</p>
-                </div>
-                <span className="dashboard-live">{loading ? "Connecting" : dashboard ? "Active campaign" : "Sign in required"}</span>
-              </div>
+              <span className="v2-badge">
+                <span className="badge-dot" /> Retailer Dashboard
+              </span>
+              <h1>{dashboard?.user.name ?? "SNT Retailer Workspace"}</h1>
+              <p className="v2-subtitle">
+                {dashboard ? `📍 ${dashboard.user.shopName} • ${dashboard.user.city}` : "Sign in to access your live account and invoice tracking."}
+              </p>
             </div>
 
-            <div className="dashboard-kpis">
-              <article className="dashboard-kpi"><p>Accepted quantity</p><strong>{approved} bags</strong><span>Approved from your invoices</span></article>
-              <article className="dashboard-kpi"><p>Current slab</p><strong>{dashboard?.currentSlab.level ?? "-"}</strong><span>{dashboard?.nextSlab ? `${dashboard.nextSlab.target - approved} bags to next tier` : "Highest tier reached"}</span></article>
-              <article className="dashboard-kpi"><p>Review queue</p><strong>{dashboard?.pendingCount ?? 0} items</strong><span>Waiting for admin review</span></article>
+            <div className="v2-dash-hero__right">
+              <span className={dashboard ? "v2-status-pill v2-status-pill--active" : "v2-status-pill"}>
+                {loading ? "⚡ Syncing Account..." : dashboard ? "✓ Active Account" : "🔒 Sign In Required"}
+              </span>
+              <Link href="/vendor/invoices" className="btn btn--primary-ecom">
+                Submit New Invoice +
+              </Link>
             </div>
-            {!dashboard && !loading ? <div className="dashboard-login-callout"><strong>Your live account is waiting.</strong><span>Sign in with WhatsApp OTP to view and submit your own invoices.</span><Link href="/vendor/login" className="btn btn--dark">Sign in</Link></div> : null}
           </div>
 
-          <aside className="dashboard-progress-card">
-            <div className="dashboard-progress-card__media"><Image src={dashboardGalleryImages[0].src} alt={dashboardGalleryImages[0].alt} fill priority sizes="(max-width: 900px) 100vw, 34vw" /></div>
-            <div className="dashboard-progress-card__content">
-              <p className="dashboard-eyebrow">Live slab progress</p>
-              <div className="dashboard-progress-card__top"><strong>{approved} / {nextTarget} bags</strong><span>{progress}%</span></div>
-              <div className="dashboard-progress-bar" aria-label={`Progress toward ${nextTarget} bags`}><span style={{ width: `${progress}%` }} /></div>
-              <p>{dashboard?.nextSlab ? `${dashboard.nextSlab.target - approved} approved bags remaining to reach ${dashboard.nextSlab.level}.` : "You are at the highest available reward tier."}</p>
+          {/* Metric KPI Cards */}
+          <div className="v2-dash-kpi-grid">
+            <div className="v2-kpi-card v2-kpi-card--green">
+              <div className="v2-kpi-top">
+                <span>Accepted Volume</span>
+                <span className="v2-kpi-icon">📦</span>
+              </div>
+              <strong>{approved} Bags</strong>
+              <small>Verified across approved invoices</small>
             </div>
-            <div className="dashboard-hero-strip"><div><span>Invoices</span><strong>{invoices.length}</strong></div><div><span>Pending review</span><strong>{dashboard?.pendingCount ?? 0}</strong></div><div><span>Gift state</span><strong>{dashboard?.redemptionOpen ? "Open" : "Locked"}</strong></div></div>
-          </aside>
+
+            <div className="v2-kpi-card v2-kpi-card--gold">
+              <div className="v2-kpi-top">
+                <span>Active Slab Tier</span>
+                <span className="v2-kpi-icon">🏆</span>
+              </div>
+              <strong>{dashboard?.currentSlab.level ?? "Level 1"}</strong>
+              <small>{dashboard?.nextSlab ? `${dashboard.nextSlab.target - approved} bags to ${dashboard.nextSlab.level}` : "Top tier reached!"}</small>
+            </div>
+
+            <div className="v2-kpi-card">
+              <div className="v2-kpi-top">
+                <span>In Review</span>
+                <span className="v2-kpi-icon">⏳</span>
+              </div>
+              <strong>{dashboard?.pendingCount ?? 0} Invoices</strong>
+              <small>Pending campaign admin verification</small>
+            </div>
+
+            <div className="v2-kpi-card">
+              <div className="v2-kpi-top">
+                <span>Redemption Window</span>
+                <span className="v2-kpi-icon">🎁</span>
+              </div>
+              <strong>{dashboard?.redemptionOpen ? "Unlocked" : "Campaign Ready"}</strong>
+              <small>{dashboard?.redemptionOpen ? "Select unlocked slab gift" : "Unlocks at redemption phase"}</small>
+            </div>
+          </div>
         </div>
       </section>
 
-      <section className="dashboard-main">
-        <div className="container dashboard-main__grid">
-          <article className="dashboard-panel dashboard-panel--wide">
-            <div className="dashboard-panel__head"><div><p className="dashboard-eyebrow">Recent activity</p><h2>Invoice submissions</h2></div><Link href="/vendor/invoices" className="btn btn--dark">New invoice</Link></div>
-            <div className="dashboard-table-wrap"><table className="dashboard-table"><thead><tr><th>Date</th><th>Invoice</th><th>Qty</th><th>Status</th><th>Slab impact</th></tr></thead><tbody>{invoices.length ? invoices.map((row) => <tr key={row.id}><td>{new Date(row.invoiceDate).toLocaleDateString("en-IN", { day: "2-digit", month: "short", year: "numeric" })}</td><td>{row.invoiceNumber}</td><td>{row.quantity} bags</td><td><span className={`status status--${row.status}`}>{row.status}</span></td><td>{row.status === "accepted" || row.status === "claimed" ? `+${row.quantity}` : "Review"}</td></tr>) : <tr><td colSpan={5}>{dashboard ? "No invoices submitted yet. Start with your first invoice." : "Sign in to see your private invoice history."}</td></tr>}</tbody></table></div>
-          </article>
+      {/* Progress Bar & Actions Grid */}
+      <section className="v2-dash-section">
+        <div className="container v2-dash-grid">
+          {/* Main Left Column */}
+          <div className="v2-dash-main-col">
+            {/* Progress Meter Panel */}
+            <div className="v2-panel v2-progress-panel">
+              <div className="v2-panel__head">
+                <div>
+                  <span className="v2-panel-eyebrow">Tier Progress</span>
+                  <h2>Campaign Reward Milestone Meter</h2>
+                </div>
+                <span className="progress-percent-chip">{progress}% Achieved</span>
+              </div>
 
-          <aside className="dashboard-panel"><div className="dashboard-panel__head dashboard-panel__head--stacked"><p className="dashboard-eyebrow">Next actions</p><h2>Keep progress moving</h2></div><div className="dashboard-action-list">{actionItems.map((item) => <Link href={item.href} className="dashboard-action" key={item.title}><div><h3>{item.title}</h3><p>{item.text}</p></div><span>{item.status}</span></Link>)}</div></aside>
+              <div className="v2-meter-wrap">
+                <div className="v2-meter-bar">
+                  <div className="v2-meter-fill" style={{ width: `${progress}%` }} />
+                </div>
+                <div className="v2-meter-labels">
+                  <span>Current: <strong>{approved} Bags</strong></span>
+                  <span>Target: <strong>{nextTarget} Bags ({dashboard?.nextSlab?.level ?? "Max Slab"})</strong></span>
+                </div>
+              </div>
 
-          <article className="dashboard-panel dashboard-stock"><div><p className="dashboard-eyebrow">Stock visibility</p><h2>Campaign supply is moving through approved invoices.</h2></div><div className="dashboard-stock__images"><figure><Image src={dashboardGalleryImages[1].src} alt={dashboardGalleryImages[1].alt} fill sizes="50vw" /><figcaption>{dashboardGalleryImages[1].title}</figcaption></figure><figure><Image src={dashboardGalleryImages[2].src} alt={dashboardGalleryImages[2].alt} fill sizes="50vw" /><figcaption>{dashboardGalleryImages[2].title}</figcaption></figure></div></article>
+              <p className="v2-meter-note">
+                {dashboard?.nextSlab
+                  ? `💡 Submit ${dashboard.nextSlab.target - approved} more approved bags to unlock ${dashboard.nextSlab.level} rewards!`
+                  : "🎉 Congratulations! You have reached the top reward slab for this campaign period."}
+              </p>
+            </div>
 
-          <article className="dashboard-panel dashboard-timeline"><div className="dashboard-panel__head dashboard-panel__head--stacked"><p className="dashboard-eyebrow">Review status</p><h2>Submission flow</h2></div><div className="dashboard-timeline__items"><div><span /><strong>Invoice captured</strong><p>Your account stores the invoice and proof file.</p></div><div><span /><strong>Admin review</strong><p>Pending entries are checked against invoice proof.</p></div><div><span /><strong>Reward updated</strong><p>Accepted quantity updates your live slab and redemption state.</p></div></div></article>
+            {/* Invoices Table Panel */}
+            <div className="v2-panel">
+              <div className="v2-panel__head">
+                <div>
+                  <span className="v2-panel-eyebrow">Submission Log</span>
+                  <h2>Recent Invoices</h2>
+                </div>
+                <Link href="/vendor/invoices" className="btn btn--outline-ecom btn--sm">
+                  View All Submissions →
+                </Link>
+              </div>
+
+              <div className="v2-table-wrap">
+                <table className="v2-table">
+                  <thead>
+                    <tr>
+                      <th>Date</th>
+                      <th>Invoice No.</th>
+                      <th>Quantity</th>
+                      <th>Review Status</th>
+                      <th>Volume Credit</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {invoices.length > 0 ? (
+                      invoices.map((row) => (
+                        <tr key={row.id}>
+                          <td>{new Date(row.invoiceDate).toLocaleDateString("en-IN", { day: "2-digit", month: "short", year: "numeric" })}</td>
+                          <td><strong>{row.invoiceNumber}</strong></td>
+                          <td>{row.quantity} bags</td>
+                          <td>
+                            <span className={`v2-status-chip v2-status-chip--${row.status}`}>
+                              {row.status}
+                            </span>
+                          </td>
+                          <td>
+                            <strong className="v2-credit-text">
+                              {row.status === "accepted" || row.status === "claimed" ? `+${row.quantity} Bags` : "Pending"}
+                            </strong>
+                          </td>
+                        </tr>
+                      ))
+                    ) : (
+                      <tr>
+                        <td colSpan={5} className="empty-table-cell">
+                          {dashboard ? "No invoices submitted yet. Click 'Submit New Invoice' to add your first bill!" : "Please sign in to view your submission history."}
+                        </td>
+                      </tr>
+                    )}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          {/* Right Sidebar Column */}
+          <div className="v2-dash-side-col">
+            {/* Quick Action Navigation */}
+            <div className="v2-panel">
+              <div className="v2-panel__head v2-panel__head--stacked">
+                <span className="v2-panel-eyebrow">Retailer Actions</span>
+                <h2>Quick Shortcuts</h2>
+              </div>
+
+              <div className="v2-action-list">
+                {actionItems.map((item) => (
+                  <Link href={item.href} key={item.title} className="v2-action-card">
+                    <span className="action-icon">{item.icon}</span>
+                    <div className="action-info">
+                      <h4>{item.title}</h4>
+                      <p>{item.text}</p>
+                    </div>
+                    <span className="action-tag">{item.status}</span>
+                  </Link>
+                ))}
+              </div>
+            </div>
+
+            {/* Campaign Visual Showcase Card */}
+            <div className="v2-panel v2-visual-card">
+              <div className="v2-visual-media">
+                <Image src={dashboardGalleryImages[0].src} alt={dashboardGalleryImages[0].alt} fill sizes="30vw" className="v2-visual-img" />
+                <div className="v2-visual-overlay" />
+                <span className="v2-visual-badge">🌾 Dispatch Verified</span>
+              </div>
+              <div className="v2-visual-content">
+                <h4>Stock Dispatch & Verification</h4>
+                <p>All submitted bags are cross-checked against authorized distributor supply batches.</p>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
     </div>
   );
 }
+
