@@ -17,10 +17,10 @@ type DashboardPayload = {
 };
 
 const actionItems = [
-  { icon: "🧾", title: "Submit new invoice", status: "Action Needed", href: "/vendor/invoices", text: "Upload bill photo, invoice date, number, and quantity bags." },
-  { icon: "🎯", title: "View milestone slabs", status: "In Progress", href: "/vendor/milestones", text: "Check your remaining bag target to unlock the next reward tier." },
-  { icon: "🎁", title: "Claim unlocked gift", status: "Status Check", href: "/vendor/redeem", text: "Review eligible rewards and check global campaign claim availability." },
-  { icon: "💬", title: "Retailer helpdesk", status: "24/7 Support", href: "/vendor/helpdesk", text: "Raise questions directly with the campaign management team." }
+  { title: "Submit Invoice Proof", href: "/vendor/invoices", text: "Upload bill photo, date, number, and quantity." },
+  { title: "Reward Milestones", href: "/vendor/milestones", text: "Track remaining bags needed for the next slab level." },
+  { title: "Claim Reward", href: "/vendor/redeem", text: "Review eligible rewards and campaign redemption status." },
+  { title: "Support Helpdesk", href: "/vendor/helpdesk", text: "Contact the SNT support team for account assistance." }
 ];
 
 export default function DashboardPage() {
@@ -40,150 +40,192 @@ export default function DashboardPage() {
   const invoices = dashboard?.invoices ?? [];
 
   return (
-    <div className="v2-dashboard-page">
-      {/* Top Header Section */}
-      <section className="v2-dash-hero">
-        <div className="container">
-          <div className="v2-dash-hero__head">
-            <div>
-              <span className="v2-badge">
-                <span className="badge-dot" /> Retailer Dashboard
-              </span>
-              <h1>{dashboard?.user.name ?? "SNT Retailer Workspace"}</h1>
-              <p className="v2-subtitle">
-                {dashboard ? `📍 ${dashboard.user.shopName} • ${dashboard.user.city}` : "Sign in to access your live account and invoice tracking."}
-              </p>
+    <div style={{ background: "#f8fafc", minHeight: "100vh", padding: "2rem 0", color: "#1e293b" }}>
+      <div className="container" style={{ maxWidth: "1200px", margin: "0 auto", padding: "0 1.5rem" }}>
+        
+        {/* Top Header Card */}
+        <div
+          style={{
+            background: "#ffffff",
+            border: "1px solid #e2e8f0",
+            borderRadius: "12px",
+            padding: "1.75rem 2rem",
+            marginBottom: "1.5rem",
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            boxShadow: "0 1px 3px rgba(0,0,0,0.05)"
+          }}
+        >
+          <div>
+            <div style={{ fontSize: "0.8rem", fontWeight: "600", color: "#1f5a43", textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: "0.25rem" }}>
+              Retailer Workspace
             </div>
-
-            <div className="v2-dash-hero__right">
-              <span className={dashboard ? "v2-status-pill v2-status-pill--active" : "v2-status-pill"}>
-                {loading ? "⚡ Syncing Account..." : dashboard ? "✓ Active Account" : "🔒 Sign In Required"}
-              </span>
-              <Link href="/vendor/invoices" className="btn btn--primary-ecom">
-                Submit New Invoice +
-              </Link>
+            <h1 style={{ fontSize: "1.5rem", fontWeight: "700", color: "#0f172a", margin: 0 }}>
+              {dashboard?.user.name ?? "SNT Partner Dashboard"}
+            </h1>
+            <div style={{ fontSize: "0.875rem", color: "#64748b", marginTop: "0.25rem" }}>
+              {dashboard ? `${dashboard.user.shopName} • ${dashboard.user.city}` : "Sign in to manage invoices and reward progress."}
             </div>
           </div>
 
-          {/* Metric KPI Cards */}
-          <div className="v2-dash-kpi-grid">
-            <div className="v2-kpi-card v2-kpi-card--green">
-              <div className="v2-kpi-top">
-                <span>Accepted Volume</span>
-                <span className="v2-kpi-icon">📦</span>
-              </div>
-              <strong>{approved} Bags</strong>
-              <small>Verified across approved invoices</small>
-            </div>
+          <div style={{ display: "flex", gap: "1rem", alignItems: "center" }}>
+            <span
+              style={{
+                fontSize: "0.8rem",
+                fontWeight: "600",
+                padding: "0.4rem 0.85rem",
+                borderRadius: "6px",
+                background: loading ? "#f1f5f9" : dashboard ? "#f0fdf4" : "#fef2f2",
+                color: loading ? "#64748b" : dashboard ? "#166534" : "#991b1b",
+                border: loading ? "1px solid #cbd5e1" : dashboard ? "1px solid #bbf7d0" : "1px solid #fecaca"
+              }}
+            >
+              {loading ? "Syncing..." : dashboard ? "Verified Account" : "Sign In Required"}
+            </span>
 
-            <div className="v2-kpi-card v2-kpi-card--gold">
-              <div className="v2-kpi-top">
-                <span>Active Slab Tier</span>
-                <span className="v2-kpi-icon">🏆</span>
-              </div>
-              <strong>{dashboard?.currentSlab.level ?? "Level 1"}</strong>
-              <small>{dashboard?.nextSlab ? `${dashboard.nextSlab.target - approved} bags to ${dashboard.nextSlab.level}` : "Top tier reached!"}</small>
-            </div>
+            <Link
+              href="/vendor/invoices"
+              style={{
+                background: "#1f5a43",
+                color: "#ffffff",
+                padding: "0.6rem 1.25rem",
+                borderRadius: "6px",
+                fontSize: "0.875rem",
+                fontWeight: "600",
+                textDecoration: "none"
+              }}
+            >
+              Submit Invoice +
+            </Link>
+          </div>
+        </div>
 
-            <div className="v2-kpi-card">
-              <div className="v2-kpi-top">
-                <span>In Review</span>
-                <span className="v2-kpi-icon">⏳</span>
-              </div>
-              <strong>{dashboard?.pendingCount ?? 0} Invoices</strong>
-              <small>Pending campaign admin verification</small>
-            </div>
+        {/* 4 Metric Cards */}
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: "1rem", marginBottom: "1.5rem" }}>
+          
+          <div style={{ background: "#ffffff", border: "1px solid #e2e8f0", borderRadius: "10px", padding: "1.25rem" }}>
+            <div style={{ fontSize: "0.8rem", color: "#64748b", fontWeight: "500" }}>Accepted Volume</div>
+            <div style={{ fontSize: "1.75rem", fontWeight: "700", color: "#1f5a43", margin: "0.35rem 0" }}>{approved} Bags</div>
+            <div style={{ fontSize: "0.775rem", color: "#94a3b8" }}>Verified across approved invoices</div>
+          </div>
 
-            <div className="v2-kpi-card">
-              <div className="v2-kpi-top">
-                <span>Redemption Window</span>
-                <span className="v2-kpi-icon">🎁</span>
-              </div>
-              <strong>{dashboard?.redemptionOpen ? "Unlocked" : "Campaign Ready"}</strong>
-              <small>{dashboard?.redemptionOpen ? "Select unlocked slab gift" : "Unlocks at redemption phase"}</small>
+          <div style={{ background: "#ffffff", border: "1px solid #e2e8f0", borderRadius: "10px", padding: "1.25rem" }}>
+            <div style={{ fontSize: "0.8rem", color: "#64748b", fontWeight: "500" }}>Current Reward Slab</div>
+            <div style={{ fontSize: "1.75rem", fontWeight: "700", color: "#0f172a", margin: "0.35rem 0" }}>
+              {dashboard?.currentSlab.level ?? "Level 1"}
+            </div>
+            <div style={{ fontSize: "0.775rem", color: "#94a3b8" }}>
+              {dashboard?.nextSlab ? `${dashboard.nextSlab.target - approved} bags to ${dashboard.nextSlab.level}` : "Top tier reached"}
+            </div>
+          </div>
+
+          <div style={{ background: "#ffffff", border: "1px solid #e2e8f0", borderRadius: "10px", padding: "1.25rem" }}>
+            <div style={{ fontSize: "0.8rem", color: "#64748b", fontWeight: "500" }}>In Review</div>
+            <div style={{ fontSize: "1.75rem", fontWeight: "700", color: "#0f172a", margin: "0.35rem 0" }}>
+              {dashboard?.pendingCount ?? 0} Invoices
+            </div>
+            <div style={{ fontSize: "0.775rem", color: "#94a3b8" }}>Pending admin verification</div>
+          </div>
+
+          <div style={{ background: "#ffffff", border: "1px solid #e2e8f0", borderRadius: "10px", padding: "1.25rem" }}>
+            <div style={{ fontSize: "0.8rem", color: "#64748b", fontWeight: "500" }}>Redemption Status</div>
+            <div style={{ fontSize: "1.75rem", fontWeight: "700", color: dashboard?.redemptionOpen ? "#1f5a43" : "#475569", margin: "0.35rem 0" }}>
+              {dashboard?.redemptionOpen ? "Open" : "Locked"}
+            </div>
+            <div style={{ fontSize: "0.775rem", color: "#94a3b8" }}>
+              {dashboard?.redemptionOpen ? "Eligible gifts ready to claim" : "Unlocks at redemption window"}
             </div>
           </div>
         </div>
-      </section>
 
-      {/* Progress Bar & Actions Grid */}
-      <section className="v2-dash-section">
-        <div className="container v2-dash-grid">
-          {/* Main Left Column */}
-          <div className="v2-dash-main-col">
-            {/* Progress Meter Panel */}
-            <div className="v2-panel v2-progress-panel">
-              <div className="v2-panel__head">
+        {/* Main Grid: Left Column & Right Sidebar */}
+        <div style={{ display: "grid", gridTemplateColumns: "2.2fr 1fr", gap: "1.5rem" }}>
+          
+          {/* Main Column */}
+          <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
+            
+            {/* Reward Progress Meter */}
+            <div style={{ background: "#ffffff", border: "1px solid #e2e8f0", borderRadius: "10px", padding: "1.5rem" }}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1rem" }}>
                 <div>
-                  <span className="v2-panel-eyebrow">Tier Progress</span>
-                  <h2>Campaign Reward Milestone Meter</h2>
+                  <div style={{ fontSize: "0.95rem", fontWeight: "700", color: "#0f172a" }}>Campaign Reward Progress</div>
+                  <div style={{ fontSize: "0.8rem", color: "#64748b" }}>Progress toward next slab target</div>
                 </div>
-                <span className="progress-percent-chip">{progress}% Achieved</span>
+                <div style={{ fontSize: "0.95rem", fontWeight: "700", color: "#1f5a43" }}>{progress}%</div>
               </div>
 
-              <div className="v2-meter-wrap">
-                <div className="v2-meter-bar">
-                  <div className="v2-meter-fill" style={{ width: `${progress}%` }} />
-                </div>
-                <div className="v2-meter-labels">
-                  <span>Current: <strong>{approved} Bags</strong></span>
-                  <span>Target: <strong>{nextTarget} Bags ({dashboard?.nextSlab?.level ?? "Max Slab"})</strong></span>
-                </div>
+              <div style={{ background: "#f1f5f9", borderRadius: "999px", height: "10px", overflow: "hidden", marginBottom: "0.85rem" }}>
+                <div style={{ background: "#1f5a43", height: "100%", width: `${progress}%`, borderRadius: "999px", transition: "width 0.4s ease" }} />
               </div>
 
-              <p className="v2-meter-note">
-                {dashboard?.nextSlab
-                  ? `💡 Submit ${dashboard.nextSlab.target - approved} more approved bags to unlock ${dashboard.nextSlab.level} rewards!`
-                  : "🎉 Congratulations! You have reached the top reward slab for this campaign period."}
-              </p>
+              <div style={{ display: "flex", justifyContent: "space-between", fontSize: "0.8rem", color: "#64748b" }}>
+                <span>Approved: <strong style={{ color: "#0f172a" }}>{approved} Bags</strong></span>
+                <span>Next Target: <strong style={{ color: "#0f172a" }}>{nextTarget} Bags ({dashboard?.nextSlab?.level ?? "Max Slab"})</strong></span>
+              </div>
             </div>
 
-            {/* Invoices Table Panel */}
-            <div className="v2-panel">
-              <div className="v2-panel__head">
+            {/* Invoices Log Table */}
+            <div style={{ background: "#ffffff", border: "1px solid #e2e8f0", borderRadius: "10px", padding: "1.5rem" }}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1.25rem" }}>
                 <div>
-                  <span className="v2-panel-eyebrow">Submission Log</span>
-                  <h2>Recent Invoices</h2>
+                  <div style={{ fontSize: "0.95rem", fontWeight: "700", color: "#0f172a" }}>Submitted Invoices</div>
+                  <div style={{ fontSize: "0.8rem", color: "#64748b" }}>Recent bill entries and verification status</div>
                 </div>
-                <Link href="/vendor/invoices" className="btn btn--outline-ecom btn--sm">
+                <Link href="/vendor/invoices" style={{ fontSize: "0.8rem", fontWeight: "600", color: "#1f5a43", textDecoration: "none" }}>
                   View All Submissions →
                 </Link>
               </div>
 
-              <div className="v2-table-wrap">
-                <table className="v2-table">
+              <div style={{ overflowX: "auto" }}>
+                <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "0.85rem", textAlign: "left" }}>
                   <thead>
-                    <tr>
-                      <th>Date</th>
-                      <th>Invoice No.</th>
-                      <th>Quantity</th>
-                      <th>Review Status</th>
-                      <th>Volume Credit</th>
+                    <tr style={{ background: "#f8fafc", borderBottom: "1px solid #e2e8f0", color: "#475569", fontSize: "0.75rem", textTransform: "uppercase", letterSpacing: "0.05em" }}>
+                      <th style={{ padding: "0.75rem 1rem" }}>Date</th>
+                      <th style={{ padding: "0.75rem 1rem" }}>Invoice No.</th>
+                      <th style={{ padding: "0.75rem 1rem" }}>Quantity</th>
+                      <th style={{ padding: "0.75rem 1rem" }}>Status</th>
+                      <th style={{ padding: "0.75rem 1rem", textAlign: "right" }}>Credit</th>
                     </tr>
                   </thead>
                   <tbody>
                     {invoices.length > 0 ? (
                       invoices.map((row) => (
-                        <tr key={row.id}>
-                          <td>{new Date(row.invoiceDate).toLocaleDateString("en-IN", { day: "2-digit", month: "short", year: "numeric" })}</td>
-                          <td><strong>{row.invoiceNumber}</strong></td>
-                          <td>{row.quantity} bags</td>
-                          <td>
-                            <span className={`v2-status-chip v2-status-chip--${row.status}`}>
+                        <tr key={row.id} style={{ borderBottom: "1px solid #f1f5f9" }}>
+                          <td style={{ padding: "0.85rem 1rem", color: "#64748b" }}>
+                            {new Date(row.invoiceDate).toLocaleDateString("en-IN", { day: "2-digit", month: "short", year: "numeric" })}
+                          </td>
+                          <td style={{ padding: "0.85rem 1rem", fontWeight: "600", color: "#0f172a" }}>
+                            {row.invoiceNumber}
+                          </td>
+                          <td style={{ padding: "0.85rem 1rem", color: "#334155" }}>
+                            {row.quantity} bags
+                          </td>
+                          <td style={{ padding: "0.85rem 1rem" }}>
+                            <span
+                              style={{
+                                fontSize: "0.75rem",
+                                fontWeight: "600",
+                                padding: "0.2rem 0.5rem",
+                                borderRadius: "4px",
+                                textTransform: "capitalize",
+                                background: row.status === "accepted" ? "#f0fdf4" : row.status === "rejected" ? "#fef2f2" : "#fffbeb",
+                                color: row.status === "accepted" ? "#166534" : row.status === "rejected" ? "#991b1b" : "#92400e",
+                                border: row.status === "accepted" ? "1px solid #bbf7d0" : row.status === "rejected" ? "1px solid #fecaca" : "1px solid #fef08a"
+                              }}
+                            >
                               {row.status}
                             </span>
                           </td>
-                          <td>
-                            <strong className="v2-credit-text">
-                              {row.status === "accepted" || row.status === "claimed" ? `+${row.quantity} Bags` : "Pending"}
-                            </strong>
+                          <td style={{ padding: "0.85rem 1rem", textAlign: "right", fontWeight: "600", color: row.status === "accepted" || row.status === "claimed" ? "#1f5a43" : "#94a3b8" }}>
+                            {row.status === "accepted" || row.status === "claimed" ? `+${row.quantity} Bags` : "Pending"}
                           </td>
                         </tr>
                       ))
                     ) : (
                       <tr>
-                        <td colSpan={5} className="empty-table-cell">
-                          {dashboard ? "No invoices submitted yet. Click 'Submit New Invoice' to add your first bill!" : "Please sign in to view your submission history."}
+                        <td colSpan={5} style={{ padding: "2rem", textAlign: "center", color: "#64748b" }}>
+                          {dashboard ? "No invoices submitted yet. Click 'Submit Invoice' to add your first bill." : "Please sign in to view your submission history."}
                         </td>
                       </tr>
                     )}
@@ -193,45 +235,55 @@ export default function DashboardPage() {
             </div>
           </div>
 
-          {/* Right Sidebar Column */}
-          <div className="v2-dash-side-col">
-            {/* Quick Action Navigation */}
-            <div className="v2-panel">
-              <div className="v2-panel__head v2-panel__head--stacked">
-                <span className="v2-panel-eyebrow">Retailer Actions</span>
-                <h2>Quick Shortcuts</h2>
+          {/* Sidebar Column */}
+          <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
+            
+            {/* Quick Actions */}
+            <div style={{ background: "#ffffff", border: "1px solid #e2e8f0", borderRadius: "10px", padding: "1.25rem" }}>
+              <div style={{ fontSize: "0.9rem", fontWeight: "700", color: "#0f172a", marginBottom: "1rem", paddingBottom: "0.5rem", borderBottom: "1px solid #f1f5f9" }}>
+                Quick Navigation
               </div>
 
-              <div className="v2-action-list">
+              <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}>
                 {actionItems.map((item) => (
-                  <Link href={item.href} key={item.title} className="v2-action-card">
-                    <span className="action-icon">{item.icon}</span>
-                    <div className="action-info">
-                      <h4>{item.title}</h4>
-                      <p>{item.text}</p>
-                    </div>
-                    <span className="action-tag">{item.status}</span>
+                  <Link
+                    key={item.title}
+                    href={item.href}
+                    style={{
+                      display: "block",
+                      padding: "0.85rem",
+                      background: "#f8fafc",
+                      border: "1px solid #f1f5f9",
+                      borderRadius: "6px",
+                      textDecoration: "none"
+                    }}
+                  >
+                    <div style={{ fontSize: "0.85rem", fontWeight: "600", color: "#0f172a" }}>{item.title}</div>
+                    <div style={{ fontSize: "0.775rem", color: "#64748b", marginTop: "0.2rem" }}>{item.text}</div>
                   </Link>
                 ))}
               </div>
             </div>
 
-            {/* Campaign Visual Showcase Card */}
-            <div className="v2-panel v2-visual-card">
-              <div className="v2-visual-media">
-                <Image src={dashboardGalleryImages[0].src} alt={dashboardGalleryImages[0].alt} fill sizes="30vw" className="v2-visual-img" />
-                <div className="v2-visual-overlay" />
-                <span className="v2-visual-badge">🌾 Dispatch Verified</span>
+            {/* Verification Visual Card */}
+            <div style={{ background: "#ffffff", border: "1px solid #e2e8f0", borderRadius: "10px", overflow: "hidden" }}>
+              <div style={{ position: "relative", height: "140px" }}>
+                <Image src={dashboardGalleryImages[0].src} alt={dashboardGalleryImages[0].alt} fill sizes="30vw" style={{ objectFit: "cover" }} />
               </div>
-              <div className="v2-visual-content">
-                <h4>Stock Dispatch & Verification</h4>
-                <p>All submitted bags are cross-checked against authorized distributor supply batches.</p>
+              <div style={{ padding: "1rem" }}>
+                <div style={{ fontSize: "0.85rem", fontWeight: "700", color: "#0f172a" }}>Stock Verification</div>
+                <div style={{ fontSize: "0.775rem", color: "#64748b", marginTop: "0.25rem" }}>
+                  Submitted invoices are cross-checked against distributor supply records.
+                </div>
               </div>
             </div>
+
           </div>
+
         </div>
-      </section>
+      </div>
     </div>
   );
 }
+
 

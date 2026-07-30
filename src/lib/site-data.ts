@@ -332,8 +332,7 @@ export const adminNav = [
   { href: "/admin", label: "Dashboard" },
   { href: "/admin/submissions", label: "Submissions" },
   { href: "/admin/registrations", label: "Registrations" },
-  { href: "/admin/slabs", label: "Slabs" },
-  { href: "/admin/support", label: "Support" }
+  { href: "/admin/slabs", label: "Slabs" }
 ];
 
 export const heroStats = [
@@ -593,22 +592,17 @@ export const adminModules = [
   {
     href: "/admin/submissions",
     title: "Submissions",
-    text: "Review invoice entries, approve or reject, and inspect Aadhaar images."
+    text: "Review invoice entries, approve or reject, and inspect invoice proof files."
   },
   {
     href: "/admin/registrations",
     title: "Registrations",
-    text: "View retailers, apply slab overrides, and reset campaign data when required."
+    text: "View retailers, apply slab overrides, and manage retailer accounts."
   },
   {
     href: "/admin/slabs",
     title: "Slabs",
-    text: "Create, edit, and delete reward tiers with attached gift images."
-  },
-  {
-    href: "/admin/support",
-    title: "Support",
-    text: "Resolve retailer tickets and keep the helpdesk queue tidy."
+    text: "Add, edit, and delete reward tiers and set target bag thresholds."
   }
 ];
 

@@ -14,31 +14,219 @@ type AdminInvoice = {
 
 export default function AdminSubmissionsPage() {
   const [invoices, setInvoices] = useState<AdminInvoice[]>([]);
+  const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState("");
+  const [filter, setFilter] = useState<"all" | "pending" | "accepted" | "rejected">("all");
 
   async function loadInvoices() {
-    const response = await fetch("/api/invoices");
-    const data = await response.json();
-    setInvoices(data.invoices ?? []);
+    try {
+      const response = await fetch("/api/invoices");
+      const data = await response.json();
+      setInvoices(data.invoices ?? []);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
   }
 
   useEffect(() => {
-    void fetch("/api/invoices")
-      .then((response) => response.json())
-      .then((data) => setInvoices(data.invoices ?? []));
+    loadInvoices();
   }, []);
 
   async function changeStatus(id: string, status: string) {
-    const response = await fetch(`/api/invoices/${id}`, { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ status }) });
+    const response = await fetch(`/api/invoices/${id}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ status })
+    });
     const data = await response.json();
-    if (!response.ok) { setMessage(data.error ?? "Could not update the invoice."); return; }
-    setMessage(`Invoice marked ${status}.`);
+    if (!response.ok) {
+      setMessage(data.error ?? "Could not update the invoice.");
+      return;
+    }
+    setMessage(`Invoice updated to ${status}.`);
     loadInvoices();
   }
 
-  return <>
-    <section className="admin-toolbar"><div><h1 className="admin-toolbar__title">Submissions</h1><p className="admin-toolbar__copy">Review live retailer invoices, inspect proof, and approve the quantity that powers rewards.</p></div><div className="admin-toolbar__actions"><span className="badge badge--gold">{invoices.length} in queue</span><span className="badge">Connected data</span></div></section>
-    {message ? <p className="form-success admin-feedback">{message}</p> : null}
-    <section className="admin-grid"><article className="admin-panel"><div className="admin-panel__title"><span className="section-heading__eyebrow">Moderation</span><h2>Invoice review queue</h2><p className="admin-panel__text">Accepting an invoice immediately recalculates the retailer dashboard and milestone position.</p></div><div className="table-wrap"><table className="data-table"><thead><tr><th>Retailer</th><th>Invoice</th><th>Qty</th><th>Status</th><th>Proof</th><th>Decision</th></tr></thead><tbody>{invoices.length ? invoices.map((row) => <tr key={row.id}><td><strong>{row.user?.name ?? "Unknown retailer"}</strong><br /><small>{row.user?.shopName ?? ""}</small></td><td>{row.invoiceNumber}<br /><small>{row.invoiceDate}</small></td><td>{row.quantity} bags</td><td><span className={`status status--${row.status}`}>{row.status}</span></td><td>{row.proofFileUrl ? <a href={row.proofFileUrl} target="_blank" rel="noreferrer" className="admin-proof-link">Open proof</a> : "Missing"}</td><td><div className="admin-row-actions"><button type="button" className="btn btn--small btn--dark" onClick={() => changeStatus(row.id, "accepted")}>Accept</button><button type="button" className="btn btn--small btn--light" onClick={() => changeStatus(row.id, "rejected")}>Reject</button></div></td></tr>) : <tr><td colSpan={6}>No retailer invoices have been submitted yet.</td></tr>}</tbody></table></div></article><article className="admin-panel"><div className="admin-panel__title"><span className="section-heading__eyebrow">Review policy</span><h2>Keep the reward total trustworthy.</h2><p className="admin-panel__text">Only accepted and claimed invoices contribute to a retailer&apos;s approved bag total. Rejected and pending records remain visible for audit.</p></div><div className="list-stack"><div className="list-item"><div className="list-item__top"><h3 className="list-item__title">Inspect the proof</h3><span className="badge badge--soft">Before accept</span></div><p className="list-item__text">Open the uploaded JPG, PNG, or PDF and match the invoice number and quantity.</p></div><div className="list-item"><div className="list-item__top"><h3 className="list-item__title">Make one clear decision</h3><span className="badge badge--soft">Live update</span></div><p className="list-item__text">The retailer sees the new status on the dashboard after the decision is saved.</p></div></div></article></section>
-  </>;
+  const filteredInvoices = invoices.filter((inv) => filter === "all" || inv.status === filter);
+
+  return (
+    <div style={{ padding: "0.5rem 0", color: "#1e293b", fontFamily: "inherit" }}>
+      {/* Header Bar */}
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          paddingBottom: "1.25rem",
+          marginBottom: "1.5rem",
+          borderBottom: "1px solid #e2e8f0"
+        }}
+      >
+        <div>
+          <div style={{ fontSize: "1.125rem", fontWeight: "700", color: "#0f172a" }}>Invoice Submissions</div>
+          <div style={{ fontSize: "0.875rem", color: "#64748b" }}>Review retailer invoices, inspect uploaded proof, and approve bag quantities</div>
+        </div>
+
+        {/* Filter Controls */}
+        <div style={{ display: "flex", gap: "0.5rem" }}>
+          {(["all", "pending", "accepted", "rejected"] as const).map((tab) => (
+            <button
+              key={tab}
+              type="button"
+              onClick={() => setFilter(tab)}
+              style={{
+                fontSize: "0.8rem",
+                fontWeight: "600",
+                padding: "0.4rem 0.85rem",
+                borderRadius: "4px",
+                border: "1px solid #cbd5e1",
+                background: filter === tab ? "#1f5a43" : "#ffffff",
+                color: filter === tab ? "#ffffff" : "#475569",
+                cursor: "pointer",
+                textTransform: "capitalize"
+              }}
+            >
+              {tab} ({tab === "all" ? invoices.length : invoices.filter((i) => i.status === tab).length})
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {message && (
+        <div style={{ background: "#f0fdf4", border: "1px solid #bbf7d0", color: "#166534", padding: "0.75rem 1rem", borderRadius: "6px", marginBottom: "1rem", fontSize: "0.875rem" }}>
+          {message}
+        </div>
+      )}
+
+      {/* Main Table Container */}
+      <div style={{ background: "#ffffff", border: "1px solid #e2e8f0", borderRadius: "8px", overflow: "hidden" }}>
+        <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "0.875rem", textAlign: "left" }}>
+          <thead>
+            <tr style={{ background: "#f8fafc", borderBottom: "1px solid #e2e8f0", color: "#475569", fontSize: "0.8rem", textTransform: "uppercase", letterSpacing: "0.05em" }}>
+              <th style={{ padding: "0.85rem 1.25rem" }}>Retailer Details</th>
+              <th style={{ padding: "0.85rem 1rem" }}>Invoice Info</th>
+              <th style={{ padding: "0.85rem 1rem" }}>Quantity</th>
+              <th style={{ padding: "0.85rem 1rem" }}>Status</th>
+              <th style={{ padding: "0.85rem 1rem" }}>Document Proof</th>
+              <th style={{ padding: "0.85rem 1.25rem", textAlign: "right" }}>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {loading ? (
+              <tr>
+                <td colSpan={6} style={{ padding: "2rem", textAlign: "center", color: "#64748b" }}>
+                  Loading invoice submissions...
+                </td>
+              </tr>
+            ) : filteredInvoices.length === 0 ? (
+              <tr>
+                <td colSpan={6} style={{ padding: "2.5rem", textAlign: "center", color: "#64748b" }}>
+                  No invoice submissions found under this filter.
+                </td>
+              </tr>
+            ) : (
+              filteredInvoices.map((row) => (
+                <tr key={row.id} style={{ borderBottom: "1px solid #f1f5f9" }}>
+                  <td style={{ padding: "1rem 1.25rem" }}>
+                    <div style={{ fontWeight: "600", color: "#0f172a" }}>{row.user?.name ?? "Unknown Retailer"}</div>
+                    <div style={{ fontSize: "0.8rem", color: "#64748b" }}>{row.user?.shopName ?? "Retail Outlet"} • {row.user?.phone ?? "No phone"}</div>
+                  </td>
+                  <td style={{ padding: "1rem" }}>
+                    <div style={{ fontWeight: "600", color: "#0f172a" }}>{row.invoiceNumber}</div>
+                    <div style={{ fontSize: "0.8rem", color: "#64748b" }}>Date: {row.invoiceDate}</div>
+                  </td>
+                  <td style={{ padding: "1rem", fontWeight: "600", color: "#0f172a" }}>
+                    {row.quantity} bags
+                  </td>
+                  <td style={{ padding: "1rem" }}>
+                    <span
+                      style={{
+                        fontSize: "0.75rem",
+                        fontWeight: "600",
+                        padding: "0.25rem 0.6rem",
+                        borderRadius: "4px",
+                        textTransform: "capitalize",
+                        background:
+                          row.status === "accepted" ? "#f0fdf4" : row.status === "rejected" ? "#fef2f2" : "#fffbeb",
+                        color:
+                          row.status === "accepted" ? "#166534" : row.status === "rejected" ? "#991b1b" : "#92400e",
+                        border:
+                          row.status === "accepted"
+                            ? "1px solid #bbf7d0"
+                            : row.status === "rejected"
+                            ? "1px solid #fecaca"
+                            : "1px solid #fef08a"
+                      }}
+                    >
+                      {row.status}
+                    </span>
+                  </td>
+                  <td style={{ padding: "1rem" }}>
+                    {row.proofFileUrl ? (
+                      <a
+                        href={row.proofFileUrl}
+                        target="_blank"
+                        rel="noreferrer"
+                        style={{
+                          fontSize: "0.8rem",
+                          fontWeight: "600",
+                          color: "#1f5a43",
+                          textDecoration: "underline"
+                        }}
+                      >
+                        View Attachment
+                      </a>
+                    ) : (
+                      <span style={{ fontSize: "0.8rem", color: "#94a3b8" }}>No file uploaded</span>
+                    )}
+                  </td>
+                  <td style={{ padding: "1rem 1.25rem", textAlign: "right" }}>
+                    <div style={{ display: "flex", gap: "0.5rem", justifyContent: "flex-end" }}>
+                      <button
+                        type="button"
+                        onClick={() => changeStatus(row.id, "accepted")}
+                        disabled={row.status === "accepted"}
+                        style={{
+                          fontSize: "0.8rem",
+                          fontWeight: "600",
+                          padding: "0.35rem 0.75rem",
+                          borderRadius: "4px",
+                          border: "1px solid #1f5a43",
+                          background: row.status === "accepted" ? "#f1f5f9" : "#1f5a43",
+                          color: row.status === "accepted" ? "#94a3b8" : "#ffffff",
+                          cursor: row.status === "accepted" ? "not-allowed" : "pointer"
+                        }}
+                      >
+                        {row.status === "accepted" ? "Approved" : "Approve"}
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => changeStatus(row.id, "rejected")}
+                        disabled={row.status === "rejected"}
+                        style={{
+                          fontSize: "0.8rem",
+                          fontWeight: "600",
+                          padding: "0.35rem 0.75rem",
+                          borderRadius: "4px",
+                          border: "1px solid #cbd5e1",
+                          background: row.status === "rejected" ? "#f1f5f9" : "#ffffff",
+                          color: row.status === "rejected" ? "#94a3b8" : "#dc2626",
+                          cursor: row.status === "rejected" ? "not-allowed" : "pointer"
+                        }}
+                      >
+                        Reject
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))
+            )}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
 }
+

@@ -1,109 +1,120 @@
 import Link from "next/link";
-import { adminModules, adminOverviewStats, supportChannels } from "@/lib/site-data";
+import { adminModules } from "@/lib/site-data";
 
 export default function AdminIndexPage() {
-  const moduleIcons: Record<string, string> = {
-    "Submissions desk": "🧾",
-    "Retailer registrations": "🏪",
-    "Slab & reward configuration": "🎯",
-    "Support queue": "💬"
-  };
-
   const quickActions = [
-    { title: "Review Submissions", href: "/admin/submissions", badge: "2 Pending", icon: "📑", bg: "#e6f4ed", color: "#1f5a43" },
-    { title: "Retailer Accounts", href: "/admin/registrations", badge: "15 Active", icon: "🏪", bg: "#fef3d6", color: "#946b13" },
-    { title: "Configure Slabs", href: "/admin/slabs", badge: "4 Tiers", icon: "🏆", bg: "#eff6ff", color: "#1d4ed8" },
-    { title: "Support Queue", href: "/admin/support", badge: "Live Desk", icon: "💬", bg: "#f3e8ff", color: "#6b21a8" }
+    { title: "Review Submissions", href: "/admin/submissions", desc: "Approve or reject uploaded retailer invoices", count: "Submissions" },
+    { title: "Retailer Accounts", href: "/admin/registrations", desc: "Manage registered shops, locations & slab overrides", count: "Retailers" },
+    { title: "Reward Slabs (CRUD)", href: "/admin/slabs", desc: "Add, edit, delete and save reward tiers", count: "Slabs" }
   ];
 
   const recentActivity = [
-    { text: "Invoice INV-9821 approved (+45 bags credited)", time: "10 mins ago", type: "approved" },
-    { text: "New Retailer Registered: Rahim Traders (Pune)", time: "25 mins ago", type: "new" },
-    { text: "Support Ticket #104 resolved by Campaign Admin", time: "1 hour ago", type: "resolved" }
+    { text: "Invoice submission INV-9821 approved", time: "10 mins ago" },
+    { text: "New retailer registered: Rahim Traders", time: "25 mins ago" },
+    { text: "Slab targets updated by administrator", time: "1 hour ago" }
   ];
 
   return (
-    <div className="v2-admin-console">
-      {/* Top Console Header */}
-      <div className="v3-clean-page-head">
+    <div style={{ padding: "0.5rem 0", color: "#1e293b", fontFamily: "inherit" }}>
+      {/* Top Header Bar */}
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          paddingBottom: "1.25rem",
+          marginBottom: "1.5rem",
+          borderBottom: "1px solid #e2e8f0"
+        }}
+      >
         <div>
-          <span className="v2-badge">
-            <span className="badge-dot" /> Operational Console
-          </span>
-          <h1>SNT Admin Dashboard</h1>
+          <div style={{ fontSize: "1.125rem", fontWeight: "700", color: "#0f172a" }}>Admin Console</div>
+          <div style={{ fontSize: "0.875rem", color: "#64748b" }}>Manage submissions, accounts, and reward configurations</div>
         </div>
-        <Link href="/admin/submissions" className="btn btn--primary-ecom">
-          Review Submissions 🧾
+        <Link
+          href="/admin/submissions"
+          style={{
+            background: "#1f5a43",
+            color: "#ffffff",
+            padding: "0.55rem 1.15rem",
+            borderRadius: "6px",
+            fontSize: "0.875rem",
+            fontWeight: "600",
+            textDecoration: "none"
+          }}
+        >
+          Review Submissions
         </Link>
       </div>
 
-      {/* Modern 4 KPI Stat Cards */}
-      <div className="admin-v3-kpi-row">
-        {adminOverviewStats.map((item, idx) => {
-          const icons = ["⏳", "🏪", "🎯", "⚡"];
-          const accents = ["border-amber", "border-emerald", "border-indigo", "border-sky"];
-          return (
-            <div className={`v3-kpi-card ${accents[idx % accents.length]}`} key={item.label}>
-              <div className="v3-kpi-header">
-                <span className="v3-kpi-label">{item.label}</span>
-                <span className="v3-kpi-icon-box">{icons[idx % icons.length]}</span>
-              </div>
-              <div className="v3-kpi-val">{item.value}</div>
-              <div className="v3-kpi-detail">{item.detail}</div>
-            </div>
-          );
-        })}
-      </div>
-
-      {/* Operational Modules & Sidebar Layout */}
-      <div className="admin-v3-grid-layout">
-        {/* Main Console Desks */}
-        <div className="v3-main-column">
-          {/* Quick Shortcuts Toolbar */}
-          <div className="admin-v3-panel">
-            <div className="v3-panel-header">
-              <div>
-                <span className="v3-eyebrow">Direct Control</span>
-                <h2>Quick Command Shortcuts</h2>
-              </div>
-            </div>
-
-            <div className="v3-quick-shortcuts-grid">
-              {quickActions.map((act) => (
-                <Link href={act.href} key={act.title} className="v3-shortcut-card">
-                  <span className="shortcut-icon">{act.icon}</span>
-                  <div>
-                    <h4>{act.title}</h4>
-                    <span className="shortcut-badge" style={{ background: act.bg, color: act.color }}>
-                      {act.badge}
-                    </span>
-                  </div>
-                </Link>
-              ))}
-            </div>
+      {/* Main Grid Layout */}
+      <div style={{ display: "grid", gridTemplateColumns: "2fr 1fr", gap: "1.5rem" }}>
+        {/* Left Column */}
+        <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
+          {/* Quick Actions Grid */}
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: "1rem" }}>
+            {quickActions.map((act) => (
+              <Link
+                key={act.title}
+                href={act.href}
+                style={{
+                  display: "block",
+                  padding: "1.25rem",
+                  background: "#ffffff",
+                  border: "1px solid #e2e8f0",
+                  borderRadius: "8px",
+                  textDecoration: "none",
+                  transition: "border-color 0.15s ease, box-shadow 0.15s ease"
+                }}
+              >
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.5rem" }}>
+                  <span style={{ fontSize: "0.95rem", fontWeight: "700", color: "#0f172a" }}>{act.title}</span>
+                  <span style={{ fontSize: "0.75rem", fontWeight: "600", color: "#1f5a43", background: "#f0fdf4", padding: "0.2rem 0.5rem", borderRadius: "4px", border: "1px solid #bbf7d0" }}>
+                    {act.count}
+                  </span>
+                </div>
+                <div style={{ fontSize: "0.825rem", color: "#64748b", lineHeight: "1.4" }}>{act.desc}</div>
+              </Link>
+            ))}
           </div>
 
-          {/* Core Control Desks Grid */}
-          <div className="admin-v3-panel">
-            <div className="v3-panel-header">
-              <div>
-                <span className="v3-eyebrow">System Desks</span>
-                <h2>Operational Desks</h2>
-              </div>
-              <span className="v3-pill-badge">4 Console Desks</span>
+          {/* Operational Modules Section */}
+          <div style={{ background: "#ffffff", border: "1px solid #e2e8f0", borderRadius: "8px", padding: "1.25rem" }}>
+            <div style={{ fontSize: "0.9rem", fontWeight: "700", color: "#0f172a", marginBottom: "1rem", paddingBottom: "0.5rem", borderBottom: "1px solid #f1f5f9" }}>
+              Management Desks
             </div>
-
-            <div className="v3-desks-grid">
+            <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}>
               {adminModules.map((item) => (
-                <div className="v3-desk-card" key={item.title}>
-                  <div className="desk-card-head">
-                    <span className="desk-icon">{moduleIcons[item.title] || "⚡"}</span>
-                    <span className="desk-status">Operational</span>
+                <div
+                  key={item.title}
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    padding: "0.85rem 1rem",
+                    background: "#f8fafc",
+                    border: "1px solid #f1f5f9",
+                    borderRadius: "6px"
+                  }}
+                >
+                  <div>
+                    <div style={{ fontSize: "0.875rem", fontWeight: "600", color: "#0f172a" }}>{item.title}</div>
+                    <div style={{ fontSize: "0.8rem", color: "#64748b" }}>{item.text}</div>
                   </div>
-                  <h3>{item.title}</h3>
-                  <p>{item.text}</p>
-                  <Link href={item.href} className="btn-v3-outline">
-                    Open Console Desk →
+                  <Link
+                    href={item.href}
+                    style={{
+                      fontSize: "0.8rem",
+                      fontWeight: "600",
+                      color: "#1f5a43",
+                      textDecoration: "none",
+                      padding: "0.35rem 0.75rem",
+                      border: "1px solid #cbd5e1",
+                      borderRadius: "4px",
+                      background: "#ffffff"
+                    }}
+                  >
+                    Open
                   </Link>
                 </div>
               ))}
@@ -111,45 +122,17 @@ export default function AdminIndexPage() {
           </div>
         </div>
 
-        {/* Right Operations & Activity Sidebar */}
-        <div className="v3-sidebar-column">
-          {/* Live Activity Stream */}
-          <div className="admin-v3-panel">
-            <div className="v3-panel-header">
-              <div>
-                <span className="v3-eyebrow">Real-time Stream</span>
-                <h2>Recent Activity</h2>
-              </div>
+        {/* Right Column: Activity Feed */}
+        <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
+          <div style={{ background: "#ffffff", border: "1px solid #e2e8f0", borderRadius: "8px", padding: "1.25rem" }}>
+            <div style={{ fontSize: "0.9rem", fontWeight: "700", color: "#0f172a", marginBottom: "1rem", paddingBottom: "0.5rem", borderBottom: "1px solid #f1f5f9" }}>
+              System Activity
             </div>
-
-            <div className="v3-activity-list">
+            <div style={{ display: "flex", flexDirection: "column", gap: "0.85rem" }}>
               {recentActivity.map((act, i) => (
-                <div className="v3-activity-item" key={i}>
-                  <span className="activity-dot" />
-                  <div>
-                    <p>{act.text}</p>
-                    <small>{act.time}</small>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Support Escalation Channels */}
-          <div className="admin-v3-panel">
-            <div className="v3-panel-header">
-              <div>
-                <span className="v3-eyebrow">Hotline & Escalation</span>
-                <h2>Operations Support</h2>
-              </div>
-            </div>
-
-            <div className="v3-contacts-stack">
-              {supportChannels.map((item) => (
-                <div className="v3-contact-box" key={item.label}>
-                  <span className="contact-tag">{item.label}</span>
-                  <strong>{item.value}</strong>
-                  <p>{item.detail}</p>
+                <div key={i} style={{ fontSize: "0.825rem", borderBottom: i < recentActivity.length - 1 ? "1px solid #f8fafc" : "none", paddingBottom: "0.5rem" }}>
+                  <div style={{ color: "#334155", fontWeight: "500" }}>{act.text}</div>
+                  <div style={{ fontSize: "0.75rem", color: "#94a3b8", marginTop: "0.15rem" }}>{act.time}</div>
                 </div>
               ))}
             </div>
@@ -159,5 +142,6 @@ export default function AdminIndexPage() {
     </div>
   );
 }
+
 
 

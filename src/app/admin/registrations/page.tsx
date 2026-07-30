@@ -2,14 +2,109 @@
 
 import { useEffect, useState } from "react";
 
-type Retailer = { id: string; name: string; phone: string; shopName: string; city: string; currentSlab: string; approvedBags: number; invoiceCount: number };
+type Retailer = {
+  id: string;
+  name: string;
+  phone: string;
+  shopName: string;
+  city: string;
+  currentSlab: string;
+  approvedBags: number;
+  invoiceCount: number;
+};
 
 export default function AdminRegistrationsPage() {
   const [retailers, setRetailers] = useState<Retailer[]>([]);
-  useEffect(() => { fetch("/api/retailers").then((response) => response.json()).then((data) => setRetailers(data.retailers ?? [])); }, []);
+  const [loading, setLoading] = useState(true);
 
-  return <>
-    <section className="admin-toolbar"><div><h1 className="admin-toolbar__title">Retailers</h1><p className="admin-toolbar__copy">Every verified WhatsApp account appears here with its live approved quantity and reward position.</p></div><div className="admin-toolbar__actions"><span className="badge badge--gold">{retailers.length} retailers</span><span className="badge">Live account data</span></div></section>
-    <section className="admin-panel"><div className="admin-panel__title"><span className="section-heading__eyebrow">Verified accounts</span><h2>Campaign participants</h2><p className="admin-panel__text">Retailers are created automatically after their first successful OTP verification.</p></div><div className="table-wrap"><table className="data-table"><thead><tr><th>Retailer</th><th>Shop</th><th>City</th><th>Approved bags</th><th>Slab</th><th>Invoices</th></tr></thead><tbody>{retailers.length ? retailers.map((row) => <tr key={row.id}><td><strong>{row.name}</strong><br /><small>{row.phone}</small></td><td>{row.shopName}</td><td>{row.city}</td><td>{row.approvedBags}</td><td>{row.currentSlab}</td><td>{row.invoiceCount}</td></tr>) : <tr><td colSpan={6}>No retailer accounts yet. The next verified login will appear here.</td></tr>}</tbody></table></div></section>
-  </>;
+  useEffect(() => {
+    fetch("/api/retailers")
+      .then((response) => response.json())
+      .then((data) => {
+        setRetailers(data.retailers ?? []);
+      })
+      .finally(() => setLoading(false));
+  }, []);
+
+  return (
+    <div style={{ padding: "0.5rem 0", color: "#1e293b", fontFamily: "inherit" }}>
+      {/* Top Header Bar */}
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          paddingBottom: "1.25rem",
+          marginBottom: "1.5rem",
+          borderBottom: "1px solid #e2e8f0"
+        }}
+      >
+        <div>
+          <div style={{ fontSize: "1.125rem", fontWeight: "700", color: "#0f172a" }}>Retailer Registrations</div>
+          <div style={{ fontSize: "0.875rem", color: "#64748b" }}>Manage verified retailer accounts and monitor active bag counts</div>
+        </div>
+        <div style={{ fontSize: "0.875rem", fontWeight: "600", color: "#1f5a43", background: "#f0fdf4", padding: "0.4rem 0.85rem", borderRadius: "6px", border: "1px solid #bbf7d0" }}>
+          Total Retailers: {retailers.length}
+        </div>
+      </div>
+
+      {/* Main Table Container */}
+      <div style={{ background: "#ffffff", border: "1px solid #e2e8f0", borderRadius: "8px", overflow: "hidden" }}>
+        <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "0.875rem", textAlign: "left" }}>
+          <thead>
+            <tr style={{ background: "#f8fafc", borderBottom: "1px solid #e2e8f0", color: "#475569", fontSize: "0.8rem", textTransform: "uppercase", letterSpacing: "0.05em" }}>
+              <th style={{ padding: "0.85rem 1.25rem" }}>Retailer Contact</th>
+              <th style={{ padding: "0.85rem 1rem" }}>Shop Name</th>
+              <th style={{ padding: "0.85rem 1rem" }}>City</th>
+              <th style={{ padding: "0.85rem 1rem" }}>Approved Bags</th>
+              <th style={{ padding: "0.85rem 1rem" }}>Current Slab</th>
+              <th style={{ padding: "0.85rem 1.25rem", textAlign: "right" }}>Total Invoices</th>
+            </tr>
+          </thead>
+          <tbody>
+            {loading ? (
+              <tr>
+                <td colSpan={6} style={{ padding: "2rem", textAlign: "center", color: "#64748b" }}>
+                  Loading retailer registrations...
+                </td>
+              </tr>
+            ) : retailers.length === 0 ? (
+              <tr>
+                <td colSpan={6} style={{ padding: "2.5rem", textAlign: "center", color: "#64748b" }}>
+                  No verified retailer accounts found yet.
+                </td>
+              </tr>
+            ) : (
+              retailers.map((row) => (
+                <tr key={row.id} style={{ borderBottom: "1px solid #f1f5f9" }}>
+                  <td style={{ padding: "1rem 1.25rem" }}>
+                    <div style={{ fontWeight: "600", color: "#0f172a" }}>{row.name}</div>
+                    <div style={{ fontSize: "0.8rem", color: "#64748b" }}>{row.phone}</div>
+                  </td>
+                  <td style={{ padding: "1rem", fontWeight: "500", color: "#334155" }}>
+                    {row.shopName}
+                  </td>
+                  <td style={{ padding: "1rem", color: "#64748b" }}>
+                    {row.city}
+                  </td>
+                  <td style={{ padding: "1rem", fontWeight: "700", color: "#1f5a43" }}>
+                    {row.approvedBags} bags
+                  </td>
+                  <td style={{ padding: "1rem" }}>
+                    <span style={{ fontSize: "0.75rem", fontWeight: "600", padding: "0.2rem 0.5rem", borderRadius: "4px", background: "#f1f5f9", color: "#334155", border: "1px solid #cbd5e1" }}>
+                      {row.currentSlab}
+                    </span>
+                  </td>
+                  <td style={{ padding: "1rem 1.25rem", textAlign: "right", fontWeight: "600", color: "#475569" }}>
+                    {row.invoiceCount} submitted
+                  </td>
+                </tr>
+              ))
+            )}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
 }
+
