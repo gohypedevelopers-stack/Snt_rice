@@ -6,6 +6,6 @@ export const dynamic = "force-dynamic";
 
 export async function GET() {
   const token = (await cookies()).get("snt_session")?.value;
-  const user = getUserBySession(token);
+  const user = await getUserBySession(token);
   return NextResponse.json({ authenticated: Boolean(user), user });
 }

@@ -15,7 +15,7 @@ export async function PATCH(request: Request, context: { params: Promise<{ id: s
       return NextResponse.json({ error: "Choose a valid invoice status." }, { status: 400 });
     }
 
-    const invoice = updateInvoiceStatus(id, body.status);
+    const invoice = await updateInvoiceStatus(id, body.status);
     if (!invoice) return NextResponse.json({ error: "Invoice not found." }, { status: 404 });
     return NextResponse.json({ ok: true, invoice });
   } catch (error) {

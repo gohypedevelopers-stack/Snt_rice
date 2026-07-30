@@ -15,7 +15,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "WhatsApp OTP is not configured yet. Add the WhatsApp Business credentials on the server." }, { status: 503 });
   }
 
-  const otp = requestOtp(phone);
+  const otp = await requestOtp(phone);
   if (process.env.NODE_ENV === "production") {
     const whatsappResponse = await fetch(`https://graph.facebook.com/v22.0/${process.env.WHATSAPP_PHONE_NUMBER_ID}/messages`, {
       method: "POST",

@@ -14,18 +14,20 @@ export async function POST(request: Request) {
   const phone = body.phone?.trim() ?? "";
   const code = body.code?.trim() ?? "";
 
-  if (!verifyOtp(phone, code)) {
+  const verifiedPhone = await verifyOtp(phone, code);
+  if (!verifiedPhone) {
     return NextResponse.json({ error: "That OTP is invalid or expired." }, { status: 400 });
   }
 
-  const user = findOrCreateRetailer({
+  const user = await findOrCreateRetailer({
     phone,
     name: body.name ?? "",
     shopName: body.shopName ?? "",
     city: body.city ?? ""
   });
+  const token = await createSession(user.id);
   const response = NextResponse.json({ ok: true, user });
-  response.cookies.set("snt_session", createSession(user.id), {
+  response.cookies.set("snt_session", token, {
     httpOnly: true,
     sameSite: "lax",
     secure: process.env.NODE_ENV === "production",

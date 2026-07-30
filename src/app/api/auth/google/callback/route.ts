@@ -30,9 +30,10 @@ export async function GET(request: Request) {
   const profile = (await profileResponse.json()) as { email?: string; name?: string };
   if (!profile.email) return NextResponse.redirect(new URL("/vendor/login?error=google_failed", request.url));
 
-  const user = findOrCreateGoogleRetailer({ email: profile.email, name: profile.name ?? "" });
+  const user = await findOrCreateGoogleRetailer({ email: profile.email, name: profile.name ?? "" });
+  const token = await createSession(user.id);
   const response = NextResponse.redirect(new URL("/vendor/dashboard", request.url));
-  response.cookies.set("snt_session", createSession(user.id), { httpOnly: true, sameSite: "lax", secure: process.env.NODE_ENV === "production", maxAge: 30 * 24 * 60 * 60, path: "/" });
+  response.cookies.set("snt_session", token, { httpOnly: true, sameSite: "lax", secure: process.env.NODE_ENV === "production", maxAge: 30 * 24 * 60 * 60, path: "/" });
   response.cookies.set("snt_google_state", "", { expires: new Date(0), path: "/" });
   return response;
 }

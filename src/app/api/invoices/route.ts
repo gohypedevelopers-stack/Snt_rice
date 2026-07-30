@@ -9,11 +9,11 @@ export const dynamic = "force-dynamic";
 
 export async function GET() {
   const admin = await requireUser("admin");
-  if (admin) return NextResponse.json({ ok: true, invoices: getAllInvoices() });
+  if (admin) return NextResponse.json({ ok: true, invoices: await getAllInvoices() });
 
   const retailer = await requireUser("retailer");
   if (!retailer) return NextResponse.json({ error: "Sign in to view invoices." }, { status: 401 });
-  return NextResponse.json({ ok: true, invoices: getInvoicesForUser(retailer.id) });
+  return NextResponse.json({ ok: true, invoices: await getInvoicesForUser(retailer.id) });
 }
 
 export async function POST(request: Request) {
@@ -47,7 +47,7 @@ export async function POST(request: Request) {
     await fs.writeFile(uploadPath, Buffer.from(await proof.arrayBuffer()));
   }
 
-  const invoice = createInvoice({
+  const invoice = await createInvoice({
     userId: user.id,
     invoiceDate,
     invoiceNumber,

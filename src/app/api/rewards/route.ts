@@ -5,7 +5,7 @@ import { getRewards, updateRewards, type RewardSlab } from "@/lib/server-store";
 export const dynamic = "force-dynamic";
 
 export async function GET() {
-  return NextResponse.json({ ok: true, rewards: getRewards() });
+  return NextResponse.json({ ok: true, rewards: await getRewards() });
 }
 
 export async function PUT(request: Request) {
@@ -17,5 +17,6 @@ export async function PUT(request: Request) {
     return NextResponse.json({ error: "Every reward tier needs a level, target, and gift." }, { status: 400 });
   }
 
-  return NextResponse.json({ ok: true, rewards: updateRewards(body) });
+  const rewards = await updateRewards(body);
+  return NextResponse.json({ ok: true, rewards });
 }
